@@ -1,0 +1,29 @@
+name: aura_red_aim_panel
+description: "Aura Red: Aim Panel mobile FPS practice, drills, and learning app."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  shared_preferences: ^2.3.2
+  share_plus: ^7.2.2
+  url_launcher: ^6.3.2
+  qr_flutter: ^4.1.0
+  applovin_max: ^4.6.4
+  app_tracking_transparency: ^2.0.7
+  purchases_flutter: 8.10.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/aura_red_icon.png

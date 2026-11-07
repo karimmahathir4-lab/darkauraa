@@ -1,0 +1,22 @@
+{
+  "project": "DarkAura",
+  "platform": "ios",
+  "github": {
+    "owner": "karimmahathir4-lab",
+    "repo": "darkauraa"
+  },
+  "provider": "github",
+  "codemagic": {},
+  "bitrise": {},
+  "ios": {
+    "path": "ios",
+    "bundleId": "com.handcraft.darkaura"
+  },
+  "flutter": {
+    "version": "y",
+    "watch": {}
+  },
+  "reactNative": {},
+  "kmp": {},
+  "mobai": {}
+}
