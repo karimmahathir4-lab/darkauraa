@@ -10,10 +10,11 @@
   "bitrise": {},
   "ios": {
     "path": "ios",
-    "bundleId": "com.handcraft.darkaura"
+    "bundleId": "com.handcraft.darkaura",
+    "configuration": "Release"
   },
   "flutter": {
-    "version": "y",
+    "version": "3.35.6",
     "watch": {}
   },
   "reactNative": {},
