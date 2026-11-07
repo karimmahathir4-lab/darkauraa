@@ -7,7 +7,6 @@ import '../app_state.dart';
 import '../localization.dart';
 import '../purchases/pro_service.dart';
 import '../theme.dart';
-import 'widgets.dart';
 
 class ProScreen extends StatefulWidget {
   const ProScreen({required this.state, super.key});
@@ -19,6 +18,7 @@ class ProScreen extends StatefulWidget {
 
 class _ProScreenState extends State<ProScreen> {
   bool _busy = false;
+  bool _loadingPrice = true;
   String? _price;
 
   @override
@@ -28,10 +28,16 @@ class _ProScreenState extends State<ProScreen> {
   }
 
   Future<void> _loadProduct() async {
+    if (mounted) {
+      setState(() => _loadingPrice = true);
+    }
     await AuraProService.instance.initialize(widget.state);
     final product = await AuraProService.instance.loadProduct();
     if (!mounted) return;
-    setState(() => _price = product?.priceString);
+    setState(() {
+      _price = product?.priceString;
+      _loadingPrice = false;
+    });
   }
 
   Future<void> _buy() => _run(AuraProService.instance.purchase,
@@ -103,32 +109,48 @@ class _ProScreenState extends State<ProScreen> {
             const SizedBox(height: 9),
             Text(
               context.tr(
-                  'A one-time purchase removes AppLovin ads from this app. Your training tools stay available.'),
+                  'Train with fewer interruptions and keep your focus on practice.'),
               textAlign: TextAlign.center,
               style: const TextStyle(color: AuraColors.secondary, height: 1.5),
             ),
             const SizedBox(height: 28),
-            AuraCard(
-              child: Column(
-                children: <Widget>[
-                  const Icon(Icons.verified_user_outlined,
-                      color: AuraColors.red, size: 32),
-                  const SizedBox(height: 10),
-                  Text(widget.state.isPro
-                      ? context.tr('Pro is active')
-                      : context.tr('Remove ads once')),
-                  const SizedBox(height: 5),
-                  Text(_price ?? context.tr('Price shown by the App Store'),
-                      style: const TextStyle(color: AuraColors.secondary)),
-                ],
+            const SizedBox(height: 10),
+            if (_loadingPrice)
+              const SizedBox.square(
+                dimension: 30,
+                child: Center(
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: AuraColors.red),
+                ),
+              )
+            else
+              Text(
+                _price ?? context.tr('Price unavailable'),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontSize: 38,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -1),
               ),
+            const SizedBox(height: 5),
+            Text(
+              widget.state.isPro
+                  ? context.tr('Pro is active')
+                  : context.tr('One-time purchase'),
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: AuraColors.secondary, fontSize: 13),
             ),
-            const SizedBox(height: 14),
+            if (!_loadingPrice && _price == null)
+              TextButton(
+                onPressed: _loadProduct,
+                child: Text(context.tr('Try again')),
+              ),
+            const SizedBox(height: 20),
             if (!widget.state.isPro)
               SizedBox(
                 height: 52,
                 child: FilledButton(
-                  onPressed: _busy ? null : _buy,
+                  onPressed: _busy || _loadingPrice ? null : _buy,
                   child: _busy
                       ? const SizedBox.square(
                           dimension: 20,

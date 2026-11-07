@@ -11,7 +11,8 @@ class AuraProService {
   AuraProService._();
 
   static final AuraProService instance = AuraProService._();
-  static const String sdkKey = 'appl_xMtGSCKeaODGxRadNfkAMXwjZhT';
+  static const String _testStoreSdkKey = 'test_nRLPepttlabiiqMpAdpIkWqAAdD';
+  static const String _appStoreSdkKey = 'appl_xMtGSCKeaODGxRadNfkAMXwjZhT';
   static const String productId = 'removeads_2_99';
   static const String entitlementId = 'dark_aura_aim_panel_pro';
 
@@ -21,6 +22,7 @@ class AuraProService {
   Future<void>? _initializing;
 
   bool get supportsPurchases => defaultTargetPlatform == TargetPlatform.iOS;
+  String get sdkKey => kDebugMode ? _testStoreSdkKey : _appStoreSdkKey;
   StoreProduct? get product => _product;
 
   Future<void> initialize(AppState state) {
@@ -31,20 +33,40 @@ class AuraProService {
 
   Future<void> _configure() async {
     try {
+      if (kDebugMode) {
+        await Purchases.setLogLevel(LogLevel.debug);
+      }
       await Purchases.configure(PurchasesConfiguration(sdkKey));
       _configured = true;
       Purchases.addCustomerInfoUpdateListener(_applyCustomerInfo);
       _applyCustomerInfo(await Purchases.getCustomerInfo());
-    } catch (_) {
-      // Store configuration failures should not prevent the app from opening.
+    } catch (error) {
+      if (kDebugMode) {
+        debugPrint('RevenueCat configuration failed: $error');
+      }
     } finally {
       _initializing = null;
     }
   }
 
   Future<StoreProduct?> loadProduct() async {
-    if (!supportsPurchases || !_configured) return null;
+    if (!supportsPurchases || !_configured) {
+      if (kDebugMode) {
+        debugPrint('RevenueCat is not configured for this platform yet.');
+      }
+      return null;
+    }
     try {
+      final offerings = await Purchases.getOfferings();
+      for (final offering in offerings.all.values) {
+        for (final package in offering.availablePackages) {
+          if (package.storeProduct.identifier == productId) {
+            _product = package.storeProduct;
+            return _product;
+          }
+        }
+      }
+
       final products = await Purchases.getProducts(
         <String>[productId],
         productCategory: ProductCategory.nonSubscription,
@@ -53,7 +75,10 @@ class AuraProService {
           .where((product) => product.identifier == productId)
           .firstOrNull;
       return _product;
-    } catch (_) {
+    } catch (error) {
+      if (kDebugMode) {
+        debugPrint('RevenueCat product lookup failed: $error');
+      }
       return null;
     }
   }
@@ -61,7 +86,8 @@ class AuraProService {
   Future<void> purchase() async {
     final item = _product ?? await loadProduct();
     if (item == null) throw StateError('The product is not available yet.');
-    _applyCustomerInfo(await Purchases.purchaseStoreProduct(item));
+    final result = await Purchases.purchase(PurchaseParams.storeProduct(item));
+    _applyCustomerInfo(result.customerInfo);
   }
 
   Future<void> restore() async {

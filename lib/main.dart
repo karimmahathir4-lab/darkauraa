@@ -31,9 +31,6 @@ Future<void> main() async {
   await state.load();
   await trainerStore.load();
   unawaited(AuraProService.instance.initialize(state));
-  if (state.onboardingComplete) {
-    unawaited(_initializeAdsAfterPurchaseCheck(state));
-  }
   runApp(AuraApp(state: state));
 }
 
@@ -197,6 +194,7 @@ class _AuraShellState extends State<AuraShell> {
   @override
   void initState() {
     super.initState();
+    unawaited(_initializeAdsAfterPurchaseCheck(widget.state));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || widget.state.initialPaywallSeen) return;
       unawaited(widget.state.markInitialPaywallSeen());

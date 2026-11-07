@@ -20,7 +20,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: EdgeInsets.fromLTRB(
+            16, 8, 16, MediaQuery.viewPaddingOf(context).bottom + 108),
         children: <Widget>[
           _masterToggle(context),
           const SizedBox(height: 12),

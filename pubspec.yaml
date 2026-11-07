@@ -17,7 +17,7 @@ dependencies:
   qr_flutter: ^4.1.0
   applovin_max: ^4.6.4
   app_tracking_transparency: ^2.0.7
-  purchases_flutter: 8.10.1
+  purchases_flutter: ^9.8.0
 
 dev_dependencies:
   flutter_test:
