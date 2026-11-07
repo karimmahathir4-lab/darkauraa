@@ -78,13 +78,13 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(context.tr('PRACTICE PROFILE'),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.w900,
                                         letterSpacing: .8,
                                         fontSize: 12)),
-                                SizedBox(height: 3),
+                                const SizedBox(height: 3),
                                 Text(context.tr('App-only preferences'),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: AuraColors.secondary,
                                         fontSize: 9)),
                               ],
@@ -98,7 +98,7 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(context.tr('SIM'),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 8,
                                     fontWeight: FontWeight.bold,
@@ -269,7 +269,7 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                                       ? Center(
                                           child: Text(
                                             context.tr('No active options'),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: AuraColors.secondary,
                                                 fontSize: 10),
                                           ),
@@ -371,12 +371,12 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                       ),
                       const Divider(height: 1, color: Color(0x28FFFFFF)),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(9, 7, 9, 8),
+                        padding: const EdgeInsets.fromLTRB(9, 7, 9, 8),
                         child: Text(
                           context.tr(
                               'Nothing on your phone or in a game is changed.'),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: AuraColors.secondary, fontSize: 9),
                         ),
                       ),
@@ -403,13 +403,13 @@ Widget _buildEditor(BuildContext context, SetupToggle item, AppState state,
           Text(
               context
                   .tr('Saved preference only · no ball is drawn in Training'),
-              style: TextStyle(fontSize: 8, color: AuraColors.secondary)),
+              style: const TextStyle(fontSize: 8, color: AuraColors.secondary)),
           const SizedBox(height: 4),
           _colorEditor(
               context.tr('Ball color preference'), 'ball_color', state),
           const SizedBox(height: 3),
           Text(context.tr('Settings'),
-              style: TextStyle(fontSize: 8, color: AuraColors.secondary)),
+              style: const TextStyle(fontSize: 8, color: AuraColors.secondary)),
           _rangeEditor(context.tr('Preferred ball size'), 'ball_size', state,
               18, 54, ' px'),
           Align(
@@ -427,7 +427,7 @@ Widget _buildEditor(BuildContext context, SetupToggle item, AppState state,
               },
               icon: const Icon(Icons.visibility_off, size: 14),
               label: Text(context.tr('Hide / turn off'),
-                  style: TextStyle(fontSize: 9)),
+                  style: const TextStyle(fontSize: 9)),
             ),
           ),
         ],
@@ -572,7 +572,7 @@ Widget _crosshairStylePicker(AppState state) => StatefulBuilder(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(context.tr('Settings · Pro Crosshair'),
-              style: TextStyle(fontSize: 8, color: AuraColors.secondary)),
+              style: const TextStyle(fontSize: 8, color: AuraColors.secondary)),
           const SizedBox(height: 4),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,

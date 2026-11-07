@@ -126,8 +126,9 @@ class SettingsScreen extends StatelessWidget {
 
   Future<void> _rate() async {
     final uri = Uri.parse(kStoreUrl);
-    if (await canLaunchUrl(uri))
+    if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 
   Future<void> _reset(BuildContext context) async {
@@ -135,7 +136,7 @@ class SettingsScreen extends StatelessWidget {
         context: context,
         builder: (context) => AlertDialog(
               title: Text(context.tr('Reset all progress?')),
-              content: Text(
+              content: const Text(
                   'This clears your drill scores and history, lesson completion, and setup checklist.'),
               actions: <Widget>[
                 TextButton(

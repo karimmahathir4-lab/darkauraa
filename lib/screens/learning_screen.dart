@@ -26,7 +26,7 @@ class LearningScreen extends StatelessWidget {
                 Row(children: <Widget>[
                   Expanded(
                       child: Text(context.tr('Learning Progress'),
-                          style: TextStyle(fontWeight: FontWeight.bold))),
+                          style: const TextStyle(fontWeight: FontWeight.bold))),
                   Text('${(progress * 100).round()}%',
                       style: const TextStyle(
                           color: AuraColors.red, fontWeight: FontWeight.bold)),
@@ -66,7 +66,8 @@ class LearningScreen extends StatelessWidget {
                   context.tr(
                       'Take a break during long sessions. Look away from the screen and relax your hands and eyes.'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AuraColors.secondary, fontSize: 12))),
+                  style: const TextStyle(
+                      color: AuraColors.secondary, fontSize: 12))),
         ]);
   }
 
@@ -154,7 +155,7 @@ class _LessonPageState extends State<LessonPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                   Text(context.tr('Key takeaways'),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, color: AuraColors.red)),
                   const SizedBox(height: 10),
                   for (final takeaway in lesson.takeaways)

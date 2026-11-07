@@ -325,7 +325,8 @@ class _TrainerScreenState extends State<TrainerScreen>
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
           children: [
             Text(context.tr('Aim Trainer'),
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
             const SizedBox(height: 4),
             Text(
               '${context.tr(_cfg.blurb)} ${_cfg.seconds}s'
@@ -366,12 +367,12 @@ class _TrainerScreenState extends State<TrainerScreen>
                   ButtonSegment(
                     value: _AimMode.direct,
                     label: Text(context.tr('Direct tap')),
-                    icon: Icon(Icons.touch_app),
+                    icon: const Icon(Icons.touch_app),
                   ),
                   ButtonSegment(
                     value: _AimMode.drag,
                     label: Text(context.tr('Drag + Fire')),
-                    icon: Icon(Icons.open_with),
+                    icon: const Icon(Icons.open_with),
                   ),
                 ],
                 selected: {_aimMode},
@@ -484,7 +485,7 @@ class _TrainerScreenState extends State<TrainerScreen>
     if (h.length < 2) {
       return Text(
         context.tr('Play two sessions to see your trend.'),
-        style: TextStyle(color: Colors.white54),
+        style: const TextStyle(color: Colors.white54),
       );
     }
     final recent = h.length > 12 ? h.sublist(h.length - 12) : h;
@@ -629,10 +630,10 @@ class _TrainerScreenState extends State<TrainerScreen>
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Align(
-                        alignment: Alignment(0, 0.6),
+                        alignment: const Alignment(0, 0.6),
                         child: Text(
                           context.tr('Press Start'),
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white54,
                               letterSpacing: 1.4,
                               fontWeight: FontWeight.w700),
@@ -656,7 +657,7 @@ class _TrainerScreenState extends State<TrainerScreen>
                         ),
                         alignment: Alignment.center,
                         child: Text(context.tr('FIRE'),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 1.2)),
                       ),
@@ -686,7 +687,7 @@ class _TrainerScreenState extends State<TrainerScreen>
           ),
           if (_newBest)
             Text(context.tr('NEW PERSONAL BEST'),
-                style: TextStyle(
+                style: const TextStyle(
                     color: Color(0xFFFACC15),
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.2,
@@ -732,7 +733,7 @@ class _TrainerScreenState extends State<TrainerScreen>
               ),
             ),
             Text(context.tr('Reaction time per hit'),
-                style: TextStyle(color: Colors.white38, fontSize: 10)),
+                style: const TextStyle(color: Colors.white38, fontSize: 10)),
           ],
         ],
       ),

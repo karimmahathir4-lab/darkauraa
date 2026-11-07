@@ -31,8 +31,9 @@ Future<void> main() async {
   await state.load();
   await trainerStore.load();
   unawaited(AuraProService.instance.initialize(state));
-  if (state.onboardingComplete)
+  if (state.onboardingComplete) {
     unawaited(_initializeAdsAfterPurchaseCheck(state));
+  }
   runApp(AuraApp(state: state));
 }
 
@@ -326,8 +327,8 @@ class _AmbientGlassBackground extends StatelessWidget {
   const _AmbientGlassBackground();
   @override
   Widget build(BuildContext context) =>
-      Stack(fit: StackFit.expand, children: <Widget>[
-        const ColoredBox(color: AuraColors.background),
+      const Stack(fit: StackFit.expand, children: <Widget>[
+        ColoredBox(color: AuraColors.background),
         Positioned(
             left: -170,
             top: 10,
@@ -336,7 +337,7 @@ class _AmbientGlassBackground extends StatelessWidget {
             right: -220,
             bottom: 15,
             child: _GlowOrb(size: 440, color: Color(0x105A0A12))),
-        const DecoratedBox(
+        DecoratedBox(
             decoration: BoxDecoration(
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,

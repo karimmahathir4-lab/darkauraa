@@ -78,7 +78,9 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
     final savedModel = prefs.getString(_modelPreferenceKey);
     if (!mounted ||
         savedModel == null ||
-        !iPhoneProfiles.any((profile) => profile.model == savedModel)) return;
+        !iPhoneProfiles.any((profile) => profile.model == savedModel)) {
+      return;
+    }
     setState(() {
       _iphoneModel = savedModel;
       _values = null;
@@ -180,7 +182,8 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
             Text(
                 context.tr(
                     'Illustrative starting point only. Apple and games do not publish universal per-iPhone aim sensitivity values; tune these in your own game.'),
-                style: TextStyle(color: AuraColors.secondary, fontSize: 11)),
+                style:
+                    const TextStyle(color: AuraColors.secondary, fontSize: 11)),
           ]));
 
   Widget _chipSet(String label, List<String> options, String selected,
@@ -231,7 +234,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(context.tr('iPhone model · choose manually'),
-            style: TextStyle(color: AuraColors.secondary, fontSize: 11)),
+            style: const TextStyle(color: AuraColors.secondary, fontSize: 11)),
         const SizedBox(height: 5),
         DropdownButtonFormField<String>(
           initialValue: _iphoneModel,

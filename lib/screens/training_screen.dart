@@ -46,15 +46,16 @@ class _TrainingScreenState extends State<TrainingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                 Text(context.tr('TRAIN WITH INTENTION'),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.1)),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
                     context.tr(
                         'Short practice rounds for timing, control, and precision.'),
-                    style: TextStyle(color: Color(0xFFE9C9CC), fontSize: 12)),
+                    style: const TextStyle(
+                        color: Color(0xFFE9C9CC), fontSize: 12)),
               ])),
           const SizedBox(height: 14),
           AuraCard(
@@ -62,8 +63,8 @@ class _TrainingScreenState extends State<TrainingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                 Text(context.tr('Round length'),
-                    style:
-                        TextStyle(color: AuraColors.secondary, fontSize: 12)),
+                    style: const TextStyle(
+                        color: AuraColors.secondary, fontSize: 12)),
                 const SizedBox(height: 8),
                 Wrap(
                     spacing: 8,

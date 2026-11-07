@@ -53,12 +53,12 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 12),
           ],
           Padding(
-            padding: EdgeInsets.only(top: 14),
+            padding: const EdgeInsets.only(top: 14),
             child: Text(
               context.tr(
                   'These toggles track your own setup. Nothing in your phone or game is changed.'),
               textAlign: TextAlign.center,
-              style: TextStyle(color: AuraColors.secondary, fontSize: 12),
+              style: const TextStyle(color: AuraColors.secondary, fontSize: 12),
             ),
           ),
         ],
@@ -72,13 +72,14 @@ class HomeScreen extends StatelessWidget {
             Row(children: <Widget>[
               Expanded(
                 child: Text(context.tr('SENSI RESULT'),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2)),
               ),
               Text(context.tr('Scale 0 to 200'),
-                  style: TextStyle(color: AuraColors.secondary, fontSize: 10)),
+                  style: const TextStyle(
+                      color: AuraColors.secondary, fontSize: 10)),
             ]),
             const SizedBox(height: 4),
             Text(
@@ -238,10 +239,10 @@ class HomeScreen extends StatelessWidget {
                     child: Container(
                       width: 20,
                       height: 20,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
-                        boxShadow: const <BoxShadow>[
+                        boxShadow: <BoxShadow>[
                           BoxShadow(color: Color(0x44000000), blurRadius: 5)
                         ],
                       ),

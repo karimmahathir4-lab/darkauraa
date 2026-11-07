@@ -50,7 +50,8 @@ ThemeData buildAuraTheme() => ThemeData(
           elevation: 0,
           textStyle: const TextStyle(fontWeight: FontWeight.w700),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -61,11 +62,11 @@ ThemeData buildAuraTheme() => ThemeData(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         ),
       ),
-      sliderTheme: SliderThemeData(
+      sliderTheme: const SliderThemeData(
         activeTrackColor: AuraColors.red,
-        inactiveTrackColor: const Color(0xFF38383D),
+        inactiveTrackColor: Color(0xFF38383D),
         thumbColor: Colors.white,
-        overlayColor: const Color(0x22E11D2E),
+        overlayColor: Color(0x22E11D2E),
         trackHeight: 3,
       ),
       dividerTheme: const DividerThemeData(

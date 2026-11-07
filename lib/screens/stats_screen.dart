@@ -27,13 +27,14 @@ class StatsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(context.tr('YOUR PROGRESS'),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.1)),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(context.tr('A look at the practice you have put in.'),
-                    style: TextStyle(color: Color(0xFFE9C9CC), fontSize: 12)),
+                    style: const TextStyle(
+                        color: Color(0xFFE9C9CC), fontSize: 12)),
               ]),
         ),
         const SizedBox(height: 14),
@@ -65,8 +66,8 @@ class StatsScreen extends StatelessWidget {
                     icon: Icons.insights),
                 const SizedBox(height: 4),
                 Text(context.tr('Your 12 most recent drill results'),
-                    style:
-                        TextStyle(color: AuraColors.secondary, fontSize: 11)),
+                    style: const TextStyle(
+                        color: AuraColors.secondary, fontSize: 11)),
                 const SizedBox(height: 18),
                 SizedBox(
                   height: 190,
@@ -98,7 +99,7 @@ class StatsScreen extends StatelessWidget {
                   const Icon(Icons.circle, color: AuraColors.red, size: 8),
                   const SizedBox(width: 6),
                   Text(context.tr('DRILL SCORE'),
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: AuraColors.secondary,
                           fontSize: 9,
                           letterSpacing: 1)),
@@ -144,11 +145,12 @@ class StatsScreen extends StatelessWidget {
               ]),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top: 15),
           child: Text(
               context.tr('Stats use practice history saved inside this app.'),
               textAlign: TextAlign.center,
-              style: TextStyle(color: AuraColors.secondary, fontSize: 11)),
+              style:
+                  const TextStyle(color: AuraColors.secondary, fontSize: 11)),
         ),
       ],
     );

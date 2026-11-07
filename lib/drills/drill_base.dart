@@ -426,7 +426,9 @@ class _DrillSessionScreenState extends State<DrillSessionScreen> {
 
   void _flashHitMarker(Offset position) {
     if (!widget.state.trainingProfileActive ||
-        !widget.state.toggle('hit_markers')) return;
+        !widget.state.toggle('hit_markers')) {
+      return;
+    }
     _showHitMarker = true;
     _hitMarkerPosition = position;
     _markerTimer?.cancel();
@@ -576,7 +578,8 @@ class _DrillSessionScreenState extends State<DrillSessionScreen> {
                                 context
                                     .tr('Hold and drag to follow the target'),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: AuraColors.secondary))),
+                                style: const TextStyle(
+                                    color: AuraColors.secondary))),
                     ],
                   ),
                 );
@@ -694,7 +697,7 @@ class _DrillSessionScreenState extends State<DrillSessionScreen> {
             const Icon(Icons.flag_circle, color: AuraColors.red, size: 60),
             const SizedBox(height: 12),
             Text(context.tr('DRILL COMPLETE'),
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2)),
@@ -705,26 +708,27 @@ class _DrillSessionScreenState extends State<DrillSessionScreen> {
                     fontWeight: FontWeight.w900,
                     color: AuraColors.red)),
             Text(context.tr('SCORE'),
-                style:
-                    TextStyle(color: AuraColors.secondary, letterSpacing: 2)),
+                style: const TextStyle(
+                    color: AuraColors.secondary, letterSpacing: 2)),
             const SizedBox(height: 20),
             Text('${context.tr('Accuracy')}  $_accuracy%'),
             if (_averageReaction != null)
-              Text('${context.tr('Average reaction')}  ${_averageReaction} ms'),
+              Text('${context.tr('Average reaction')}  $_averageReaction ms'),
             if (_reactionTimes.isNotEmpty)
               Text(
                   '${context.tr('Best reaction')}  ${_reactionTimes.reduce(min)} ms'),
             if (_averageTargetTime != null)
               Text(
-                  '${context.tr('Average time to hit')}  ${_averageTargetTime} ms'),
+                  '${context.tr('Average time to hit')}  $_averageTargetTime ms'),
             if (widget.drill.numbered)
               Text(
                   'Targets per minute  ${(_hits * 60 / widget.durationSeconds).round()}'),
             if (_isNewBest)
               Padding(
-                  padding: EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.only(top: 12),
                   child: Chip(
-                      avatar: Icon(Icons.emoji_events, color: Colors.amber),
+                      avatar:
+                          const Icon(Icons.emoji_events, color: Colors.amber),
                       label: Text(context.tr('NEW BEST')))),
             const SizedBox(height: 24),
             Row(children: <Widget>[

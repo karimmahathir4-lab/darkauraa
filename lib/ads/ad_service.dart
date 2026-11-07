@@ -99,8 +99,9 @@ class AuraAds {
 
   void pointerUp(PointerUpEvent event) {
     final start = _pointerStarts.remove(event.pointer);
-    if (_adsDisabled || start == null || !start.canCount || _pauseDepth > 0)
+    if (_adsDisabled || start == null || !start.canCount || _pauseDepth > 0) {
       return;
+    }
     if ((event.position - start.position).distance > 14) return;
     if (event.timeStamp - start.timeStamp > const Duration(milliseconds: 700)) {
       return;
