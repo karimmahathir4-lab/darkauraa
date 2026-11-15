@@ -29,8 +29,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       <(IconData, String, String)>[
     (
       Icons.bolt,
-      'Practice with purpose',
-      'Build steadier aim with short drills, progress tracking, and practical lessons.'
+      'Customize Sensi Setup',
+      'Choose your in-app sensitivity and setup preferences, then fine-tune them for comfortable practice. Your choices stay in the app and never change your phone or game.'
     ),
     (
       Icons.tune,

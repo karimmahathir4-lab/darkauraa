@@ -41,6 +41,9 @@ class _AuraLocalizationsDelegate
 const _translations = <String, Map<String, String>>{
   'pt': {
     'Get Pro': 'Seja Pro',
+    'Customize Sensi Setup': 'Personalize sua configuração de sensibilidade',
+    'Choose your in-app sensitivity and setup preferences, then fine-tune them for comfortable practice. Your choices stay in the app and never change your phone or game.':
+        'Escolha suas preferências de sensibilidade e configuração no app e ajuste-as para treinar com conforto. Suas escolhas ficam no app e não alteram o celular nem o jogo.',
     'Compare plans': 'Compare os planos',
     'Free': 'Grátis',
     'Ad-free experience': 'Experiência sem anúncios',
@@ -532,6 +535,9 @@ const _translations = <String, Map<String, String>>{
   },
   'es': {
     'Get Pro': 'Hazte Pro',
+    'Customize Sensi Setup': 'Personaliza la sensibilidad',
+    'Choose your in-app sensitivity and setup preferences, then fine-tune them for comfortable practice. Your choices stay in the app and never change your phone or game.':
+        'Elige tus preferencias de sensibilidad y configuración dentro de la app y ajústalas para practicar con comodidad. Tus opciones se guardan en la app y no cambian el teléfono ni el juego.',
     'Compare plans': 'Compara los planes',
     'Free': 'Gratis',
     'Ad-free experience': 'Sin anuncios',
@@ -1024,6 +1030,9 @@ const _translations = <String, Map<String, String>>{
   },
   'ar': {
     'Get Pro': 'احصل على Pro',
+    'Customize Sensi Setup': 'خصص إعداد الحساسية',
+    'Choose your in-app sensitivity and setup preferences, then fine-tune them for comfortable practice. Your choices stay in the app and never change your phone or game.':
+        'اختر تفضيلات الحساسية والإعداد داخل التطبيق واضبطها لتدريب مريح. تبقى اختياراتك داخل التطبيق ولا تغيّر الهاتف أو اللعبة.',
     'Compare plans': 'قارن الخطط',
     'Free': 'مجاني',
     'Ad-free experience': 'تجربة بلا إعلانات',
