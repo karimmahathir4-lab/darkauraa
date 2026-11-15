@@ -20,8 +20,7 @@ import 'purchases/pro_service.dart';
 import 'screens/pro_screen.dart';
 
 const String kAppName = 'Dark Aura Panel';
-const String kStoreUrl =
-    'https://play.google.com/store/apps/details?id=com.example.auraaim';
+const String kStoreUrl = 'https://apps.apple.com/us/app/id6831959156';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 

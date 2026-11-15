@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,6 +13,9 @@ import '../localization.dart';
 import 'pro_screen.dart';
 import 'privacy_screen.dart';
 import 'widgets.dart';
+
+const MethodChannel _reviewChannel =
+    MethodChannel('com.handcraft.darkaura/review');
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({required this.state, super.key});
@@ -125,7 +130,19 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Future<void> _rate() async {
-    final uri = Uri.parse(kStoreUrl);
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      try {
+        final requested =
+            await _reviewChannel.invokeMethod<bool>('requestReview');
+        if (requested == true) return;
+      } on PlatformException {
+        // Fall back to the App Store listing when native review isn't available.
+      } on MissingPluginException {
+        // Fall back to the App Store listing when native review isn't available.
+      }
+    }
+
+    final uri = Uri.parse('$kStoreUrl?action=write-review');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
