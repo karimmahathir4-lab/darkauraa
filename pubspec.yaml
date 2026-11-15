@@ -1,7 +1,7 @@
 name: aura_red_aim_panel
 description: "Dark Aura Panel mobile FPS practice, drills, and learning app."
 publish_to: 'none'
-version: 1.0.3+5
+version: 1.0.3+6
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

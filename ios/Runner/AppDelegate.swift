@@ -9,6 +9,11 @@ import UIKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+    let didFinishLaunching = super.application(
+      application,
+      didFinishLaunchingWithOptions: launchOptions
+    )
+
     if let controller = window?.rootViewController as? FlutterViewController {
       let reviewChannel = FlutterMethodChannel(
         name: "com.handcraft.darkaura/review",
@@ -32,6 +37,6 @@ import UIKit
         result(true)
       }
     }
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    return didFinishLaunching
   }
 }
