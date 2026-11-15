@@ -13,6 +13,7 @@ import '../screens/widgets.dart';
 import '../widgets/crosshair_painter.dart';
 import '../localization.dart';
 import 'profile_components.dart';
+import 'pro_screen.dart';
 
 class ProfilesScreen extends StatefulWidget {
   const ProfilesScreen({required this.state, super.key});
@@ -39,6 +40,8 @@ class _ProfilesScreenState extends State<ProfilesScreen> {
   }
 
   Future<void> _saveNew() async {
+    if (!await _requirePro()) return;
+    if (!mounted) return;
     final name = await showProfileNameDialog(
       context,
       title: context.tr('Save current setup'),
@@ -48,12 +51,22 @@ class _ProfilesScreenState extends State<ProfilesScreen> {
   }
 
   Future<void> _import() async {
+    if (!await _requirePro()) return;
+    if (!mounted) return;
     final p = await showProfileImportDialog(context);
-    if (p == null) return;
+    if (!mounted || p == null) return;
     widget.state.importProfile(p);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('${context.tr('Imported')} ${p.name}')));
+  }
+
+  Future<bool> _requirePro() async {
+    if (widget.state.isPro) return true;
+    await Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (_) => ProScreen(state: widget.state),
+    ));
+    return mounted && widget.state.isPro;
   }
 
   @override
@@ -188,7 +201,8 @@ class _ProfilesScreenState extends State<ProfilesScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: FilledButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              if (!await _requirePro()) return;
                               widget.state.tap();
                               widget.state.updateActiveProfile();
                             },
@@ -203,7 +217,10 @@ class _ProfilesScreenState extends State<ProfilesScreen> {
             ],
             if (active != null) ...[
               SectionTitle(context.tr('Tune active profile')),
-              _tuningCard(context, widget.state),
+              if (widget.state.isPro)
+                _tuningCard(context, widget.state)
+              else
+                _proProfilePrompt(context),
             ],
             SectionTitle(context.tr('Manage')),
             SizedBox(
@@ -211,7 +228,7 @@ class _ProfilesScreenState extends State<ProfilesScreen> {
               child: FilledButton.icon(
                 onPressed: _saveNew,
                 icon: const Icon(Icons.add),
-                label: Text(context.tr('Save current setup')),
+                label: _manageButtonLabel(context, 'Save current setup'),
               ),
             ),
             const SizedBox(height: 10),
@@ -220,7 +237,7 @@ class _ProfilesScreenState extends State<ProfilesScreen> {
               child: OutlinedButton.icon(
                 onPressed: _import,
                 icon: const Icon(Icons.download),
-                label: Text(context.tr('Import from code')),
+                label: _manageButtonLabel(context, 'Import from code'),
               ),
             ),
             SectionTitle(context.tr('Profile Lab')),
@@ -230,6 +247,52 @@ class _ProfilesScreenState extends State<ProfilesScreen> {
       },
     );
   }
+
+  Widget _manageButtonLabel(BuildContext context, String label) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(context.tr(label)),
+          if (!widget.state.isPro) ...<Widget>[
+            const SizedBox(width: 7),
+            const Icon(Icons.workspace_premium,
+                size: 15, color: AuraColors.red),
+            const SizedBox(width: 3),
+            Text(context.tr('Pro'),
+                style: const TextStyle(
+                    color: AuraColors.red, fontWeight: FontWeight.w700)),
+          ],
+        ],
+      );
+
+  Widget _proProfilePrompt(BuildContext context) => GlassCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(children: <Widget>[
+              const Icon(Icons.workspace_premium, color: AuraColors.red),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Text(context.tr('Profile editing is a Pro feature'),
+                      style: const TextStyle(fontWeight: FontWeight.w700))),
+            ]),
+            const SizedBox(height: 6),
+            Text(
+                context.tr(
+                    'Create profiles and customize their settings with Pro.'),
+                style: const TextStyle(color: Colors.white54, fontSize: 12)),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                        builder: (_) => ProScreen(state: widget.state))),
+                child: Text(context.tr('Get Pro')),
+              ),
+            ),
+          ],
+        ),
+      );
 
   Widget _tuningCard(BuildContext context, AppState state) => GlassCard(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -93,7 +93,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const Icon(Icons.bolt, color: AuraColors.red, size: 22),
                   const SizedBox(width: 8),
                   const Expanded(
-                    child: Text('DARK AURA',
+                    child: Text('DARK AURA PANEL',
                         style: TextStyle(
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.3,

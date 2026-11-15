@@ -114,7 +114,8 @@ class _ProScreenState extends State<ProScreen> {
               style: const TextStyle(color: AuraColors.secondary, height: 1.5),
             ),
             const SizedBox(height: 28),
-            const SizedBox(height: 10),
+            _planComparison(context),
+            const SizedBox(height: 22),
             if (_loadingPrice)
               const SizedBox.square(
                 dimension: 30,
@@ -187,5 +188,84 @@ class _ProScreenState extends State<ProScreen> {
             ),
           ],
         ),
+      );
+
+  Widget _planComparison(BuildContext context) => Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AuraColors.card,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AuraColors.redBorder),
+        ),
+        child: Column(children: <Widget>[
+          Row(children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: Text(context.tr('Compare plans'),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w700)),
+            ),
+            Expanded(
+                flex: 2,
+                child: Text(context.tr('Free'),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: AuraColors.secondary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700))),
+            Expanded(
+                flex: 2,
+                child: Text(context.tr('Pro'),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: AuraColors.red,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800))),
+          ]),
+          const Divider(height: 18, color: Color(0x2FFFFFFF)),
+          _comparisonRow(context, 'Ad-free experience', 'With ads'),
+          _comparisonRow(context, 'All Pro features', 'Some locked'),
+          _comparisonRow(context, 'Edit Profiles', 'View & switch'),
+          _comparisonRow(context, 'Drill time', 'Up to 60 sec',
+              proValue: 'Unlimited'),
+        ]),
+      );
+
+  Widget _comparisonRow(BuildContext context, String feature, String freeValue,
+          {String proValue = 'Included'}) =>
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 7),
+        child: Row(children: <Widget>[
+          Expanded(
+            flex: 5,
+            child:
+                Text(context.tr(feature), style: const TextStyle(fontSize: 12)),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(context.tr(freeValue),
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(color: AuraColors.secondary, fontSize: 10)),
+          ),
+          Expanded(
+            flex: 2,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(Icons.workspace_premium,
+                      color: AuraColors.red, size: 13),
+                  const SizedBox(width: 3),
+                  Flexible(
+                    child: Text(context.tr(proValue),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                ]),
+          ),
+        ]),
       );
 }

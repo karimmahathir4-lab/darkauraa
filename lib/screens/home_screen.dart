@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../ads/ad_service.dart';
 import '../app_state.dart';
 import '../data/toggles.dart';
+import 'pro_screen.dart';
 import '../theme.dart';
 import '../localization.dart';
 import 'widgets.dart';
@@ -376,6 +377,7 @@ class HomeScreen extends StatelessWidget {
                         size: 18, color: AuraColors.secondary)),
                 if (!state.isPro &&
                     AuraAds.instance.supportsAds &&
+                    !proToggleIds.contains(item.id) &&
                     AuraAds.rewardedToggleIds.contains(item.id))
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
@@ -385,6 +387,11 @@ class HomeScreen extends StatelessWidget {
                           size: 17, color: AuraColors.red),
                     ),
                   ),
+                if (proToggleIds.contains(item.id)) ...<Widget>[
+                  const SizedBox(width: 3),
+                  _ProFeatureBadge(label: context.tr('Pro')),
+                  const SizedBox(width: 3),
+                ],
                 Switch(
                     value: state.toggle(item.id),
                     onChanged: (value) => _changeToggle(context, item, value)),
@@ -395,6 +402,14 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> _changeToggle(
       BuildContext context, SetupToggle item, bool enabled) async {
+    if (enabled && !state.isPro && proToggleIds.contains(item.id)) {
+      await Navigator.of(context).push(MaterialPageRoute<void>(
+        builder: (_) => ProScreen(state: state),
+      ));
+      if (!context.mounted || !state.isPro) return;
+      await state.setToggle(item.id, true);
+      return;
+    }
     if (!enabled ||
         state.isPro ||
         !AuraAds.instance.supportsAds ||
@@ -464,5 +479,28 @@ class HomeScreen extends StatelessWidget {
                         color: AuraColors.secondary, height: 1.5)),
               ]),
         ),
+      );
+}
+
+class _ProFeatureBadge extends StatelessWidget {
+  const _ProFeatureBadge({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+        decoration: BoxDecoration(
+          border: Border.all(color: AuraColors.red),
+          borderRadius: BorderRadius.circular(7),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          const Icon(Icons.workspace_premium, size: 11, color: AuraColors.red),
+          const SizedBox(width: 2),
+          Text(label,
+              style: const TextStyle(
+                  color: AuraColors.red,
+                  fontSize: 9,
+                  fontWeight: FontWeight.w800)),
+        ]),
       );
 }

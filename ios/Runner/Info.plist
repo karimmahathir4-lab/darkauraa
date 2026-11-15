@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Dark Aura Aim Panel</string>
+	<string>Dark Aura Panel</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Dark Aura Aim Panel</string>
+	<string>Dark Aura Panel</string>
 	<key>AppLovinSdkKey</key>
 	<string>8RHCMxxZPei--AGwtM3E6OEev0RW51t-s1RrGEr0puTkrPT7XC7AEHoaUa2FCmJ3PTAJSVW2AeHBgIoA4MpNS-</string>
 	<key>NSUserTrackingUsageDescription</key>

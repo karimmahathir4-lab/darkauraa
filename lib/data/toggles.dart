@@ -15,6 +15,14 @@ class ToggleGroup {
   final List<SetupToggle> items;
 }
 
+const Set<String> proToggleIds = <String>{
+  'ai_sensi_aim',
+  'crosshair',
+  'fire_size',
+  'ping_live',
+  'hit_markers',
+};
+
 const List<ToggleGroup> toggleGroups = <ToggleGroup>[
   ToggleGroup('Sensi Setup', <SetupToggle>[
     SetupToggle(

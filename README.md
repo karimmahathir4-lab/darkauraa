@@ -1,6 +1,6 @@
-# Dark Aura Aim Panel
+# Dark Aura Panel
 
-Dark Aura Aim Panel is a mobile FPS practice companion with an in-app setup checklist,
+Dark Aura Panel is a mobile FPS practice companion with an in-app setup checklist,
 eight short aim drills, a five-mode aim trainer, saveable and shareable
 practice profiles, sample device and sensitivity panels, original practice
 lessons, and animated progress screens. Checklist preferences, lesson

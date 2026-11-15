@@ -322,7 +322,8 @@ class _TrainerScreenState extends State<TrainerScreen>
 
         return ListView(
           physics: playing ? const NeverScrollableScrollPhysics() : null,
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          padding: EdgeInsets.fromLTRB(
+              16, 12, 16, MediaQuery.viewPaddingOf(context).bottom + 112),
           children: [
             Text(context.tr('Aim Trainer'),
                 style:

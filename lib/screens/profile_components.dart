@@ -10,6 +10,15 @@ import '../theme.dart';
 import '../trainer_store.dart';
 import '../widgets/common.dart';
 import '../widgets/crosshair_painter.dart';
+import 'pro_screen.dart';
+
+Future<bool> _ensureProfilePro(BuildContext context, AppState state) async {
+  if (state.isPro) return true;
+  await Navigator.of(context).push(MaterialPageRoute<void>(
+    builder: (_) => ProScreen(state: state),
+  ));
+  return context.mounted && state.isPro;
+}
 
 Future<Profile?> showProfileImportDialog(BuildContext context) =>
     showDialog<Profile>(
@@ -18,7 +27,11 @@ Future<Profile?> showProfileImportDialog(BuildContext context) =>
     );
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({required this.profile, required this.state, required this.active, super.key});
+  const ProfileCard(
+      {required this.profile,
+      required this.state,
+      required this.active,
+      super.key});
 
   final Profile profile;
   final AppState state;
@@ -140,18 +153,26 @@ class ProfileCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _IconBtn(Icons.edit_outlined, context.tr('Rename'), () async {
+              _IconBtn(Icons.edit_outlined, context.tr('Rename · Pro'),
+                  () async {
+                if (!await _ensureProfilePro(context, state)) return;
+                if (!context.mounted) return;
                 final name = await showProfileNameDialog(context,
                     title: context.tr('Rename profile'), initial: profile.name);
                 if (name != null) state.renameProfile(profile, name);
               }),
-              _IconBtn(Icons.copy_outlined, context.tr('Duplicate'), () {
+              _IconBtn(Icons.copy_outlined, context.tr('Duplicate · Pro'),
+                  () async {
+                if (!await _ensureProfilePro(context, state)) return;
                 state.tap();
                 state.duplicateProfile(profile);
               }),
               _IconBtn(Icons.qr_code_2, context.tr('Share code / QR'),
                   () => showProfileShareDialog(context, profile)),
-              _IconBtn(Icons.delete_outline, context.tr('Delete'), () async {
+              _IconBtn(Icons.delete_outline, context.tr('Delete · Pro'),
+                  () async {
+                if (!await _ensureProfilePro(context, state)) return;
+                if (!context.mounted) return;
                 final ok = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(

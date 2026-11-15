@@ -292,10 +292,14 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool toggle(String id) => toggles[id] ?? false;
+  bool toggle(String id) =>
+      (!proToggleIds.contains(id) || isPro) && (toggles[id] ?? false);
 
   int get selectedSettingsCount =>
-      toggles.values.where((enabled) => enabled).length;
+      toggleGroups
+          .expand((group) => group.items)
+          .where((item) => toggle(item.id))
+          .length;
 
   dynamic profileValue(String id) => profileValues[id];
 
@@ -345,6 +349,7 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> setToggle(String id, bool value) async {
+    if (value && proToggleIds.contains(id) && !isPro) return;
     toggles[id] = value;
     notifyListeners();
     await AuraStorage.writeJson(AuraStorage.togglesKey, toggles);

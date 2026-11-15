@@ -19,7 +19,7 @@ import 'localization.dart';
 import 'purchases/pro_service.dart';
 import 'screens/pro_screen.dart';
 
-const String kAppName = 'Dark Aura Aim Panel';
+const String kAppName = 'Dark Aura Panel';
 const String kStoreUrl =
     'https://play.google.com/store/apps/details?id=com.example.auraaim';
 
@@ -223,35 +223,27 @@ class _AuraShellState extends State<AuraShell> {
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    foregroundColor: widget.state.isPro
-                        ? const Color(0xFFFFD66B)
-                        : AuraColors.red,
-                    backgroundColor: const Color(0x14E11D2E),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-                    minimumSize: const Size(0, 44),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(horizontal: 9),
+                    minimumSize: const Size(0, 36),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    side: BorderSide(
-                      color: widget.state.isPro
-                          ? const Color(0xAAFFD66B)
-                          : AuraColors.red,
-                      width: 1.2,
-                    ),
+                    side: const BorderSide(color: AuraColors.red, width: 1.2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text(widget.state.isPro ? 'PRO' : context.tr('Pro'),
+                      const Icon(Icons.workspace_premium,
+                          color: AuraColors.red, size: 17),
+                      const SizedBox(width: 5),
+                      Text(widget.state.isPro ? 'PRO' : context.tr('Get Pro'),
                           style: const TextStyle(
-                              fontWeight: FontWeight.w800, height: 1)),
-                      Text(
-                          widget.state.isPro
-                              ? context.tr('Active')
-                              : context.tr('Remove ads'),
-                          style: const TextStyle(fontSize: 9, height: 1.2)),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                              height: 1)),
                     ],
                   ),
                 ),

@@ -17,7 +17,8 @@ class LearningScreen extends StatelessWidget {
     final progress = state.completedLessons.length / lessons.length;
     final modules = lessons.map((lesson) => lesson.module).toSet();
     return ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: EdgeInsets.fromLTRB(
+            16, 8, 16, MediaQuery.viewPaddingOf(context).bottom + 112),
         children: <Widget>[
           AuraCard(
               child: Column(
@@ -130,7 +131,8 @@ class _LessonPageState extends State<LessonPage> {
     return Scaffold(
       appBar: AppBar(title: Text(context.tr(lesson.module))),
       body: ListView(
-          padding: const EdgeInsets.fromLTRB(18, 8, 18, 28),
+          padding: EdgeInsets.fromLTRB(
+              18, 8, 18, MediaQuery.viewPaddingOf(context).bottom + 28),
           children: <Widget>[
             Text(context.tr(lesson.title),
                 style: const TextStyle(

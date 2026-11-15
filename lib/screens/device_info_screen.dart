@@ -127,7 +127,8 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
 
   @override
   Widget build(BuildContext context) => ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          padding: EdgeInsets.fromLTRB(
+              16, 8, 16, MediaQuery.viewPaddingOf(context).bottom + 112),
           children: <Widget>[
             _generatorCard(),
             const SizedBox(height: 14),
