@@ -1,6 +1,6 @@
 workflows:
-  ios-testflight:
-    name: "Dark Aura Panel"
+  ios-unsigned-test:
+    name: "Dark Aura Panel - unsigned test build"
     max_build_duration: 60
     instance_type: mac_mini_m2
 
@@ -12,25 +12,12 @@ workflows:
           include: true
       cancel_previous_builds: true
 
-    # This must match the App Store Connect integration name in Codemagic.
-    integrations:
-      app_store_connect: coding
-
     environment:
       flutter: stable
-      # Xcode 27.1 includes the iOS SDK and simulator support needed to build
-      # and inspect the app on iPhone Duo.
       xcode: "27.1"
       cocoapods: default
       vars:
         BUNDLE_ID: com.handcraft.darkaura
-      ios_signing:
-        # These are the reference names of the profile and certificate uploaded
-        # under Codemagic Team settings > codemagic.yaml settings > Code signing identities.
-        provisioning_profiles:
-          - DarkProf
-        certificates:
-          - CraftCer
 
     scripts:
       - name: Get Flutter packages
@@ -41,30 +28,20 @@ workflows:
           cd ios
           pod install
 
-      - name: Set up code signing
-        script: xcode-project use-profiles
-
-      - name: Build signed Flutter IPA
+      - name: Build unsigned app and package test IPA
         script: |
-          flutter build ipa --release \
+          flutter build ios --release --no-codesign \
             --build-name=1.0.3 \
-            --build-number=6 \
-            --export-options-plist="$HOME/export_options.plist"
+            --build-number=6
+
+          rm -rf build/ios/ipa
+          mkdir -p build/ios/ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app build/ios/ipa/Payload/Runner.app
+          ditto -c -k --sequesterRsrc --keepParent \
+            build/ios/ipa/Payload \
+            build/ios/ipa/DarkAuraPanel-unsigned.ipa
 
     artifacts:
       - build/ios/ipa/*.ipa
-      - build/ios/archive/*.xcarchive
+      - build/ios/iphoneos/Runner.app
       - /tmp/xcodebuild_logs/*.log
-
-    publishing:
-      email:
-        recipients:
-          - karimmahathir4@gmail.com
-        notify:
-          success: true
-          failure: true
-
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-        # Add submit_to_app_store: true when the app record and store listing are ready.
