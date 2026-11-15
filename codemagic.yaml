@@ -1,6 +1,6 @@
 workflows:
-  ios-unsigned-test:
-    name: "Dark Aura Panel - unsigned test build"
+  ios-testflight:
+    name: "Dark Aura Panel"
     max_build_duration: 60
     instance_type: mac_mini_m2
 
@@ -12,12 +12,20 @@ workflows:
           include: true
       cancel_previous_builds: true
 
+    integrations:
+      app_store_connect: coding
+
     environment:
       flutter: stable
       xcode: "27.1"
       cocoapods: default
       vars:
         BUNDLE_ID: com.handcraft.darkaura
+      ios_signing:
+        provisioning_profiles:
+          - DarkProf
+        certificates:
+          - CraftCer
 
     scripts:
       - name: Get Flutter packages
@@ -28,20 +36,29 @@ workflows:
           cd ios
           pod install
 
-      - name: Build unsigned app and package test IPA
-        script: |
-          flutter build ios --release --no-codesign \
-            --build-name=1.0.3 \
-            --build-number=6
+      - name: Set up code signing
+        script: xcode-project use-profiles
 
-          rm -rf build/ios/ipa
-          mkdir -p build/ios/ipa/Payload
-          cp -R build/ios/iphoneos/Runner.app build/ios/ipa/Payload/Runner.app
-          ditto -c -k --sequesterRsrc --keepParent \
-            build/ios/ipa/Payload \
-            build/ios/ipa/DarkAuraPanel-unsigned.ipa
+      - name: Build signed Flutter IPA
+        script: |
+          flutter build ipa --release \
+            --build-name=1.0.3 \
+            --build-number=6 \
+            --export-options-plist="$HOME/export_options.plist"
 
     artifacts:
       - build/ios/ipa/*.ipa
-      - build/ios/iphoneos/Runner.app
+      - build/ios/archive/*.xcarchive
       - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      email:
+        recipients:
+          - karimmahathir4@gmail.com
+        notify:
+          success: true
+          failure: true
+
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
