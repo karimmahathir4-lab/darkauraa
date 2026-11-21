@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../ads/ad_service.dart';
 import '../app_state.dart';
-import '../trainer_store.dart';
 import '../main.dart' show kAppName, kStoreUrl;
 import '../theme.dart';
 import '../localization.dart';
@@ -26,6 +25,7 @@ class SettingsScreen extends StatelessWidget {
           child: Scaffold(
         appBar: AppBar(title: Text(context.tr('Settings'))),
         body: ListView(padding: const EdgeInsets.all(12), children: <Widget>[
+          _appIconCard(context),
           _languageCard(context),
           _tile(
               context,
@@ -49,21 +49,165 @@ class SettingsScreen extends StatelessWidget {
               context.tr('Tell someone about Aura Aim'), () => _share(context)),
           _tile(context, Icons.star_outline, context.tr('Rate App'),
               context.tr('Open the app store page'), _rate),
-          _tile(
-              context,
-              Icons.delete_outline,
-              context.tr('Reset all progress'),
-              context.tr('Clear scores, lessons, streaks, and toggles'),
-              () => _reset(context)),
-          _tile(context, Icons.delete_sweep_outlined, 'Clear trainer stats',
-              'Remove Aim Trainer history, bests, and achievements', () {
-            trainerStore.clear();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Trainer stats cleared.')),
-            );
-          }),
         ]),
       ));
+
+  Widget _appIconCard(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: AuraCard(
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(children: <Widget>[
+                const Icon(Icons.app_shortcut_outlined,
+                    color: AuraColors.red, size: 21),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        context.tr('App Icon'),
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        state.isPro
+                            ? context.tr('Choose your preferred app icon')
+                            : context.tr('Unlock Pro to switch app icons'),
+                        style: const TextStyle(
+                            color: AuraColors.secondary, fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ),
+                if (!state.isPro)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: const Color(0x28E11D2E),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0x66E11D2E)),
+                    ),
+                    child: Text(
+                      context.tr('PRO'),
+                      style: const TextStyle(
+                        color: AuraColors.red,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ),
+              ]),
+              const SizedBox(height: 14),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: _iconOptionTile(
+                      context: context,
+                      title: context.tr('Original Icon'),
+                      assetPath: 'assets/aura_red_icon.png',
+                      iconKey: 'default',
+                      selected: state.currentAppIcon == 'default',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _iconOptionTile(
+                      context: context,
+                      title: context.tr('Pro Rabbit Icon'),
+                      assetPath: 'assets/pro_rabbit_icon.png',
+                      iconKey: 'ProIcon',
+                      selected: state.currentAppIcon == 'ProIcon',
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _iconOptionTile({
+    required BuildContext context,
+    required String title,
+    required String assetPath,
+    required String iconKey,
+    required bool selected,
+  }) =>
+      InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () async {
+          if (!state.isPro && iconKey != 'default') {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => ProScreen(state: state),
+              ),
+            );
+            return;
+          }
+          await state.setAppIcon(iconKey);
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: selected ? const Color(0x28E11D2E) : const Color(0x111E1E24),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: selected ? AuraColors.red : const Color(0x22FFFFFF),
+              width: selected ? 1.8 : 1,
+            ),
+          ),
+          child: Column(
+            children: <Widget>[
+              Stack(
+                clipBehavior: Clip.none,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Image.asset(
+                      assetPath,
+                      width: 54,
+                      height: 54,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  if (selected)
+                    Positioned(
+                      right: -4,
+                      bottom: -4,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                          color: AuraColors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.check,
+                            size: 13, color: Colors.white),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  color: selected ? Colors.white : const Color(0xFFD0D0D5),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 
   Widget _languageCard(BuildContext context) => Padding(
         padding: const EdgeInsets.only(bottom: 10),
@@ -146,30 +290,6 @@ class SettingsScreen extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
-  }
-
-  Future<void> _reset(BuildContext context) async {
-    final accepted = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(context.tr('Reset all progress?')),
-              content: const Text(
-                  'This clears your drill scores and history, lesson completion, and setup checklist.'),
-              actions: <Widget>[
-                TextButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: Text(context.tr('Cancel'))),
-                FilledButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: Text(context.tr('Reset everything'))),
-              ],
-            ));
-    if (accepted != true) return;
-    await state.resetAll();
-    trainerStore.clear();
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.tr('All progress cleared'))));
   }
 }
 

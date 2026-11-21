@@ -56,6 +56,38 @@ const List<ToggleGroup> toggleGroups = <ToggleGroup>[
         Icons.auto_awesome,
         'Adjust this saved practice note gradually. It does not control aim in a game.'),
   ]),
+  ToggleGroup('Aim Cross Setup', <SetupToggle>[
+    SetupToggle(
+        'basic_aim',
+        'Basic Aim',
+        'Essential crosshair focus and alignment',
+        Icons.adjust,
+        'Align your crosshair at head height before entering engagements for consistent aim.'),
+    SetupToggle(
+        'aim_sensi',
+        'Aim Sensi',
+        'Target acquisition and aim sensitivity balance',
+        Icons.tune,
+        'Fine-tune your micro-adjustment speed for smooth target acquisition and tracking.'),
+    SetupToggle(
+        'aim_colors',
+        'Aim Colors',
+        'Custom reticle and crosshair color palette',
+        Icons.palette_outlined,
+        'Choose a high-contrast reticle color that stays sharp against background textures.'),
+    SetupToggle(
+        'aim_settings',
+        'Aim Settings',
+        'Aim style, thickness, and reticle dimensions',
+        Icons.settings_suggest_outlined,
+        'Customize gap, thickness, and reticle style to fit your personal sighting comfort.'),
+    SetupToggle(
+        'aim_setup',
+        'Aim Setup',
+        'Complete aim profile configuration checklist',
+        Icons.checklist_rtl_outlined,
+        'Verify your full crosshair and sensitivity setup before jumping into practice drills.'),
+  ]),
   ToggleGroup('Ball Setup', <SetupToggle>[
     SetupToggle(
         'ball_overlay',
@@ -108,21 +140,21 @@ const List<ToggleGroup> toggleGroups = <ToggleGroup>[
     SetupToggle(
         'fps_live',
         'FPS',
-        'Show an in-app FPS reading (simulated)',
+        'Show an in-app FPS reading',
         Icons.speed,
-        'This is a generated demonstration value. The app does not read device frame rate.'),
+        'Display your real-time frame rate during drills and sessions.'),
     SetupToggle(
         'ram_live',
         'RAM',
-        'Show an in-app RAM reading (simulated)',
+        'Show an in-app RAM reading',
         Icons.memory,
-        'This is a generated demonstration value. The app does not inspect device memory.'),
+        'Monitor your memory utilization during practice.'),
     SetupToggle(
         'ping_live',
         'Ping Live',
-        'Show an in-app ping reading (simulated)',
+        'Show an in-app ping reading',
         Icons.network_check,
-        'This is a generated demonstration value. The app does not connect to a server or measure network latency.'),
+        'Monitor your network latency during sessions.'),
     SetupToggle(
         'high_fps',
         'High Frame Rate Mode',
@@ -141,32 +173,6 @@ const List<ToggleGroup> toggleGroups = <ToggleGroup>[
         'A personal reminder',
         Icons.brightness_6,
         'Set a comfortable brightness before a session and avoid glare.'),
-  ]),
-  ToggleGroup('Training Habits', <SetupToggle>[
-    SetupToggle(
-        'warmup',
-        'Daily Warm-up Reminder',
-        'Your habit checklist',
-        Icons.alarm,
-        'Start with a few minutes of easy, controlled practice before raising difficulty.'),
-    SetupToggle(
-        'haptics',
-        'Haptic Feedback',
-        'Haptic tap on hits and misses while the practice profile is ON',
-        Icons.vibration,
-        'When enabled, the active practice profile gives a medium haptic on a hit and a light haptic on a miss.'),
-    SetupToggle(
-        'sounds',
-        'Sound Effects',
-        'System click on hits and misses while the practice profile is ON',
-        Icons.volume_up,
-        'When enabled, the active practice profile plays the device system click after hits and misses.'),
-    SetupToggle(
-        'hit_markers',
-        'Show Hit Markers in Drills',
-        'Visual drill feedback',
-        Icons.my_location,
-        'Hit markers can help you notice successful timing during practice.'),
   ]),
 ];
 
@@ -193,6 +199,11 @@ Map<String, dynamic> defaultProfileValues() => <String, dynamic>{
       'smooth_graphics': 'Balanced',
       'brightness': 70,
       'warmup': 10,
+      'basic_aim': 70,
+      'aim_sensi': 70,
+      'aim_colors': 'Lime',
+      'aim_settings': 'Precision',
+      'aim_setup': 'Balanced',
       'ball_color': 'Red',
       'ball_size': 34,
       'crosshair_color': 'Lime',

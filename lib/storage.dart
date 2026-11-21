@@ -13,6 +13,17 @@ class AuraStorage {
   static const String languageKey = 'aura.language_code';
   static const String onboardingKey = 'aura.onboarding_complete';
   static const String initialPaywallKey = 'aura.initial_paywall_seen';
+  static const String selectedAppIconKey = 'aura.selected_app_icon';
+
+  static Future<String?> readSelectedAppIcon() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(selectedAppIconKey);
+  }
+
+  static Future<void> writeSelectedAppIcon(String icon) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(selectedAppIconKey, icon);
+  }
 
   static Future<bool> readOnboardingComplete() async {
     final prefs = await SharedPreferences.getInstance();

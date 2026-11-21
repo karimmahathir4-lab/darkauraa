@@ -86,7 +86,9 @@ class AuraApp extends StatelessWidget {
               ),
             ),
             home: state.onboardingComplete
-                ? AuraShell(state: state)
+                ? AppLoadingGate(
+                    child: AuraShell(state: state),
+                  )
                 : OnboardingScreen(state: state),
           ));
 }
@@ -156,8 +158,12 @@ class _DraggableProfileIconState extends State<_DraggableProfileIcon> {
                           BoxShadow(color: Color(0x88E11D2E), blurRadius: 18),
                           BoxShadow(color: Color(0xAA000000), blurRadius: 8),
                         ],
-                        image: const DecorationImage(
-                          image: AssetImage('assets/aura_red_icon.png'),
+                        image: DecorationImage(
+                          image: AssetImage(
+                            widget.state.currentAppIcon == 'ProIcon'
+                                ? 'assets/pro_rabbit_icon.png'
+                                : 'assets/aura_red_icon.png',
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -212,41 +218,71 @@ class _AuraShellState extends State<AuraShell> {
             titleSpacing: 0,
             toolbarHeight: 66,
             automaticallyImplyLeading: false,
-            title: const SizedBox.shrink(),
-            actions: <Widget>[
-              AdsExcludedTapArea(
-                child: TextButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => ProScreen(state: widget.state),
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.transparent,
-                    padding: const EdgeInsets.symmetric(horizontal: 9),
-                    minimumSize: const Size(0, 36),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    side: const BorderSide(color: AuraColors.red, width: 1.2),
-                    shape: RoundedRectangleBorder(
+            leadingWidth: 120,
+            leading: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: AdsExcludedTapArea(
+                  child: Container(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
+                      gradient: const LinearGradient(
+                        colors: <Color>[
+                          Color(0xFFFFD700), // Vibrant gold/yellow
+                          AuraColors.red,    // Red
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Icon(Icons.workspace_premium,
-                          color: AuraColors.red, size: 17),
-                      const SizedBox(width: 5),
-                      Text(widget.state.isPro ? 'PRO' : context.tr('Get Pro'),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              height: 1)),
-                    ],
+                    padding: const EdgeInsets.all(1.2), // Gradient border outline
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF140D0E),
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(9),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => ProScreen(state: widget.state),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.workspace_premium,
+                                  color: Color(0xFFFFD700), // Yellow icon
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  widget.state.isPro ? 'PRO' : context.tr('Get Pro'),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 13,
+                                    height: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
+            ),
+            title: const SizedBox.shrink(),
+            actions: <Widget>[
               AdsExcludedTapArea(
                 child: IconButton(
                   tooltip: context.tr('Settings'),
@@ -430,6 +466,120 @@ class _GlassNavigationBar extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AppLoadingGate extends StatefulWidget {
+  const AppLoadingGate({required this.child, super.key});
+  final Widget child;
+
+  @override
+  State<AppLoadingGate> createState() => _AppLoadingGateState();
+}
+
+class _AppLoadingGateState extends State<AppLoadingGate> {
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<void>.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_loading) {
+      return widget.child;
+    }
+    return Scaffold(
+      backgroundColor: const Color(0xFF0C0C0E),
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          const ColoredBox(color: Color(0xFF0C0C0E)),
+          Positioned(
+            left: -80,
+            top: -80,
+            child: Container(
+              width: 320,
+              height: 320,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x22E11D2E),
+              ),
+            ),
+          ),
+          Positioned(
+            right: -100,
+            bottom: -100,
+            child: Container(
+              width: 360,
+              height: 360,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0x185A0A12),
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 104,
+                  height: 104,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(26),
+                    border: Border.all(
+                      color: const Color(0xFFE11D2E),
+                      width: 2.2,
+                    ),
+                    boxShadow: const <BoxShadow>[
+                      BoxShadow(
+                        color: Color(0x66E11D2E),
+                        blurRadius: 28,
+                        spreadRadius: 2,
+                      ),
+                      BoxShadow(
+                        color: Color(0xAA000000),
+                        blurRadius: 14,
+                        offset: Offset(0, 6),
+                      ),
+                    ],
+                    image: const DecorationImage(
+                      image: AssetImage('assets/aura_red_icon.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 28),
+                const SizedBox.square(
+                  dimension: 26,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: AuraColors.red,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  context.tr('Loading Panel...'),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -28,3 +28,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/aura_red_icon.png
+    - assets/paywall_rabbit_crown.jpg
+    - assets/pro_rabbit_icon.png

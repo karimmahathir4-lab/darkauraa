@@ -35,7 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     (
       Icons.tune,
       'Your setup stays yours',
-      'Checklist choices stay in this app. Nothing in your game or phone is changed.'
+      'Checklist choices stay in this app.'
     ),
     (
       Icons.privacy_tip_outlined,
@@ -118,7 +118,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ? 'Privacy and control'
                         : slide.$2;
                     final description = adsSlide && !_isApplePlatform
-                        ? 'Your progress stays on this device. Nothing in your game or phone is changed.'
+                        ? 'Your progress stays on this device.'
                         : slide.$3;
                     return SingleChildScrollView(
                       padding: const EdgeInsets.symmetric(

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../ads/ad_service.dart';
 import '../app_state.dart';
 import '../data/toggles.dart';
+import '../main.dart' show kStoreUrl;
 import 'pro_screen.dart';
 import '../theme.dart';
 import '../localization.dart';
 import 'widgets.dart';
-import 'training_screen.dart';
-import 'stats_screen.dart';
-import 'device_info_screen.dart';
-import 'settings_screen.dart';
-import '../widgets/sub_page.dart';
+
+const MethodChannel _homeReviewChannel =
+    MethodChannel('com.handcraft.darkaura/review');
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen(
@@ -25,111 +27,90 @@ class HomeScreen extends StatelessWidget {
             16, 8, 16, MediaQuery.viewPaddingOf(context).bottom + 108),
         children: <Widget>[
           _masterToggle(context),
-          const SizedBox(height: 12),
-          AuraCard(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SectionTitle(context.tr('Your Practice Snapshot'),
-                      icon: Icons.bolt),
-                  const SizedBox(height: 16),
-                  Row(children: <Widget>[
-                    _metric(
-                        context.tr('DAILY STREAK'),
-                        '${state.streak} ${context.tr('days')}',
-                        Icons.local_fire_department),
-                    _metric(context.tr('DRILLS DONE'),
-                        '${state.history.length}', Icons.flag),
-                    _metric(context.tr('LESSONS'), '${state.lessonPercent}%',
-                        Icons.menu_book),
-                  ]),
-                ]),
-          ),
-          const SizedBox(height: 12),
-          _sensiResult(context),
-          const SizedBox(height: 12),
-          _quickAccess(context),
           const SizedBox(height: 14),
           for (final group in toggleGroups) ...<Widget>[
             _group(context, group),
             const SizedBox(height: 12),
           ],
-          Padding(
-            padding: const EdgeInsets.only(top: 14),
-            child: Text(
-              context.tr(
-                  'These toggles track your own setup. Nothing in your phone or game is changed.'),
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AuraColors.secondary, fontSize: 12),
-            ),
-          ),
+          _rateUsCard(context),
+          const SizedBox(height: 14),
         ],
       );
 
-  Widget _sensiResult(BuildContext context) => AuraCard(
-        padding: const EdgeInsets.fromLTRB(16, 15, 16, 13),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(children: <Widget>[
-              Expanded(
-                child: Text(context.tr('SENSI RESULT'),
-                    style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2)),
+  Widget _rateUsCard(BuildContext context) => AuraCard(
+        padding: const EdgeInsets.all(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => _openRate(context),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: const Color(0x28E11D2E),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: const Color(0x66E11D2E)),
+                ),
+                child: const Icon(
+                  Icons.star,
+                  color: AuraColors.red,
+                  size: 28,
+                ),
               ),
-              Text(context.tr('Scale 0 to 200'),
-                  style: const TextStyle(
-                      color: AuraColors.secondary, fontSize: 10)),
-            ]),
-            const SizedBox(height: 4),
-            Text(
-              '${context.tr(state.hasGeneratedSensitivityResults ? 'GENERATED' : 'SAMPLE PREVIEW')} · ${state.sensitivityModel}',
-              style: const TextStyle(
-                  color: AuraColors.secondary, fontSize: 8, letterSpacing: .7),
-            ),
-            const SizedBox(height: 13),
-            for (final label in const <String>[
-              'General',
-              'Red Dot',
-              '2x',
-              '4x',
-              'AWM'
-            ])
-              _sensiRow(label, state.sensitivityResults[label] ?? 0),
-          ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      context.tr('Rate Our App'),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AuraColors.red,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      context.tr('Enjoying Dark Aura? Leave us a 5-star review!'),
+                      style: const TextStyle(
+                        color: AuraColors.secondary,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right,
+                color: AuraColors.secondary,
+                size: 22,
+              ),
+            ],
+          ),
         ),
       );
 
-  Widget _sensiRow(String label, int value) => Padding(
-        padding: const EdgeInsets.only(bottom: 11),
-        child: Row(children: <Widget>[
-          SizedBox(
-            width: 70,
-            child: Text(label,
-                style: const TextStyle(fontSize: 11, color: Colors.white)),
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: (value / 200).clamp(0.0, 1.0),
-                minHeight: 8,
-                backgroundColor: const Color(0xFF332126),
-                color: AuraColors.red,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 38,
-            child: Text('$value',
-                textAlign: TextAlign.right,
-                style:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
-          ),
-        ]),
-      );
+  Future<void> _openRate(BuildContext context) async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      try {
+        final requested =
+            await _homeReviewChannel.invokeMethod<bool>('requestReview');
+        if (requested == true) return;
+      } on PlatformException {
+        // Fall back to App Store url
+      } on MissingPluginException {
+        // Fall back to App Store url
+      }
+    }
+
+    final uri = Uri.parse('$kStoreUrl?action=write-review');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
 
   Widget _masterToggle(BuildContext context) {
     final active = state.trainingProfileActive;
@@ -142,7 +123,7 @@ class HomeScreen extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(26),
             onTap: () {
               if (active) {
                 state.setTrainingProfileActive(false);
@@ -155,16 +136,16 @@ class HomeScreen extends StatelessWidget {
                     behavior: SnackBarBehavior.floating,
                   ));
               } else {
-                onActivateTraining();
+                state.setTrainingProfileActive(true);
               }
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 320),
               curve: Curves.easeInOut,
-              height: 76,
-              padding: const EdgeInsets.symmetric(horizontal: 21),
+              height: 104,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22),
+                borderRadius: BorderRadius.circular(26),
                 gradient: LinearGradient(
                   colors: active
                       ? const <Color>[Color(0xFFE11D2E), Color(0xFF5A0A12)]
@@ -175,10 +156,14 @@ class HomeScreen extends StatelessWidget {
                 border: Border.all(
                     color: active
                         ? const Color(0x88E11D2E)
-                        : const Color(0x35FFFFFF)),
+                        : const Color(0x35FFFFFF),
+                    width: 1.8),
                 boxShadow: active
                     ? const <BoxShadow>[
-                        BoxShadow(color: Color(0x44E11D2E), blurRadius: 22)
+                        BoxShadow(
+                            color: Color(0x55E11D2E),
+                            blurRadius: 28,
+                            spreadRadius: 2)
                       ]
                     : const <BoxShadow>[],
               ),
@@ -189,10 +174,10 @@ class HomeScreen extends StatelessWidget {
                     active ? Icons.power_settings_new : Icons.bolt,
                     key: ValueKey<bool>(active),
                     color: Colors.white,
-                    size: 30,
+                    size: 42,
                   ),
                 ),
-                const SizedBox(width: 15),
+                const SizedBox(width: 18),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -203,34 +188,38 @@ class HomeScreen extends StatelessWidget {
                         child: Text(
                           active ? 'ON' : 'OFF',
                           key: ValueKey<bool>(active),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 19,
+                          style: TextStyle(
+                              color: active
+                                  ? Colors.white
+                                  : const Color(0xFFD8D8DB),
+                              fontSize: 32,
                               fontWeight: FontWeight.w900,
-                              letterSpacing: 1.4),
+                              letterSpacing: 2.0),
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 3),
                       Text(
                         context.tr(active
-                            ? 'Practice profile enabled'
-                            : 'Tap to enable practice profile'),
+                            ? 'Enabled'
+                            : 'Tap to enable'),
                         style: const TextStyle(
-                            color: Color(0xFFD8D8DB), fontSize: 11),
+                            color: Color(0xFFD8D8DB),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
                 ),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 260),
-                  width: 48,
-                  height: 28,
-                  padding: const EdgeInsets.all(3),
+                  width: 66,
+                  height: 38,
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: active
                         ? const Color(0xAAFFFFFF)
                         : const Color(0x44000000),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(24),
                     border: Border.all(color: const Color(0x55FFFFFF)),
                   ),
                   child: AnimatedAlign(
@@ -239,13 +228,13 @@ class HomeScreen extends StatelessWidget {
                     alignment:
                         active ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
-                      width: 20,
-                      height: 20,
+                      width: 30,
+                      height: 30,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
-                          BoxShadow(color: Color(0x44000000), blurRadius: 5)
+                          BoxShadow(color: Color(0x44000000), blurRadius: 6)
                         ],
                       ),
                     ),
@@ -258,145 +247,112 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _quickAccess(BuildContext context) => AuraCard(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        child: Wrap(
-          alignment: WrapAlignment.spaceAround,
-          runSpacing: 10,
-          children: <(IconData, String, Widget)>[
-            (
-              Icons.sports_esports_outlined,
-              'Drill library',
-              TrainingScreen(state: state)
-            ),
-            (Icons.insights_outlined, 'Stats', StatsScreen(state: state)),
-            (Icons.speed_outlined, 'Monitor', DeviceInfoScreen(state: state)),
-            (Icons.settings_outlined, 'Settings', SettingsScreen(state: state)),
-          ]
-              .map((entry) => SizedBox(
-                    width: 78,
-                    child: Listener(
-                      behavior: HitTestBehavior.translucent,
-                      onPointerDown: entry.$2 == 'Settings'
-                          ? (_) => AuraAds.instance.pauseInterstitials()
-                          : null,
-                      onPointerUp: entry.$2 == 'Settings'
-                          ? (_) => AuraAds.instance.resumeInterstitials()
-                          : null,
-                      onPointerCancel: entry.$2 == 'Settings'
-                          ? (_) => AuraAds.instance.resumeInterstitials()
-                          : null,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(14),
-                        onTap: () {
-                          if (entry.$2 == 'Settings') {
-                            Navigator.of(context).push(MaterialPageRoute<void>(
-                              builder: (_) => SettingsScreen(state: state),
-                            ));
-                          } else {
-                            openSubPage(context, entry.$3);
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 3),
-                          child: Column(children: <Widget>[
-                            Icon(entry.$1, color: AuraColors.red, size: 20),
-                            const SizedBox(height: 5),
-                            Text(context.tr(entry.$2),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                    fontSize: 10, color: AuraColors.secondary)),
-                          ]),
-                        ),
-                      ),
-                    ),
-                  ))
-              .toList(),
-        ),
-      );
-
-  Widget _metric(String label, String value, IconData icon) => Expanded(
-        child: Column(children: <Widget>[
-          Icon(icon, color: AuraColors.red, size: 20),
-          const SizedBox(height: 6),
-          Text(value,
-              textAlign: TextAlign.center,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 3),
-          Text(label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: AuraColors.secondary, fontSize: 8, letterSpacing: .7)),
-        ]),
-      );
-
   Widget _group(BuildContext context, ToggleGroup group) {
     final ready = group.items.where((item) => state.toggle(item.id)).length;
-    return AuraCard(
-      padding: const EdgeInsets.fromLTRB(14, 14, 10, 8),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(children: <Widget>[
-              Expanded(
-                  child: Text(context.tr(group.title),
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold))),
-              Text(
-                  '$ready ${context.tr('of')} ${group.items.length} ${context.tr('ready')}',
-                  style: const TextStyle(
-                      color: AuraColors.secondary, fontSize: 11)),
-            ]),
-            const SizedBox(height: 6),
-            for (final item in group.items)
-              Row(children: <Widget>[
-                Icon(item.icon, color: AuraColors.red, size: 20),
-                const SizedBox(width: 10),
-                Expanded(
-                    child: InkWell(
-                  onTap: () => _showTip(context, item),
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(context.tr(item.title),
-                                style: const TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w600)),
-                            Text(context.tr(item.subtitle),
-                                style: const TextStyle(
-                                    fontSize: 10, color: AuraColors.secondary)),
-                          ])),
-                )),
-                IconButton(
-                    tooltip: context.tr('Setup tip'),
-                    onPressed: () => _showTip(context, item),
-                    icon: const Icon(Icons.info_outline,
-                        size: 18, color: AuraColors.secondary)),
-                if (!state.isPro &&
-                    AuraAds.instance.supportsAds &&
-                    !proToggleIds.contains(item.id) &&
-                    AuraAds.rewardedToggleIds.contains(item.id))
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Tooltip(
-                      message: context.tr('Rewarded ad feature'),
-                      child: const Icon(Icons.play_circle_outline,
-                          size: 17, color: AuraColors.red),
-                    ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          AuraCard(
+            padding: const EdgeInsets.fromLTRB(14, 18, 10, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    '$ready ${context.tr('of')} ${group.items.length} ${context.tr('ready')}',
+                    style: const TextStyle(
+                        color: AuraColors.secondary, fontSize: 11),
                   ),
-                if (proToggleIds.contains(item.id)) ...<Widget>[
-                  const SizedBox(width: 3),
-                  _ProFeatureBadge(label: context.tr('Pro')),
-                  const SizedBox(width: 3),
-                ],
-                Switch(
-                    value: state.toggle(item.id),
-                    onChanged: (value) => _changeToggle(context, item, value)),
-              ]),
-          ]),
+                ),
+                const SizedBox(height: 6),
+                for (final item in group.items)
+                  Row(children: <Widget>[
+                    Icon(item.icon, color: AuraColors.red, size: 20),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child: InkWell(
+                      onTap: () => _showTip(context, item),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(context.tr(item.title),
+                                    style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600)),
+                                Text(context.tr(item.subtitle),
+                                    style: const TextStyle(
+                                        fontSize: 10,
+                                        color: AuraColors.secondary)),
+                              ])),
+                    )),
+                    IconButton(
+                        tooltip: context.tr('Setup tip'),
+                        onPressed: () => _showTip(context, item),
+                        icon: const Icon(Icons.info_outline,
+                            size: 18, color: AuraColors.secondary)),
+                    if (!state.isPro &&
+                        AuraAds.instance.supportsAds &&
+                        !proToggleIds.contains(item.id) &&
+                        AuraAds.rewardedToggleIds.contains(item.id))
+                      Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Tooltip(
+                          message: context.tr('Rewarded ad feature'),
+                          child: const Icon(Icons.play_circle_outline,
+                              size: 17, color: AuraColors.red),
+                        ),
+                      ),
+                    if (proToggleIds.contains(item.id)) ...<Widget>[
+                      const SizedBox(width: 3),
+                      _ProFeatureBadge(label: context.tr('Pro')),
+                      const SizedBox(width: 3),
+                    ],
+                    Switch(
+                        value: state.toggle(item.id),
+                        onChanged: (value) =>
+                            _changeToggle(context, item, value)),
+                  ]),
+              ],
+            ),
+          ),
+          Positioned(
+            top: -10,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AuraColors.red,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const <BoxShadow>[
+                    BoxShadow(
+                      color: Color(0x66E11D2E),
+                      blurRadius: 10,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  context.tr(group.title),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -488,19 +444,33 @@ class _ProFeatureBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
         decoration: BoxDecoration(
-          border: Border.all(color: AuraColors.red),
           borderRadius: BorderRadius.circular(7),
+          gradient: const LinearGradient(
+            colors: <Color>[
+              Color(0xFFFFD700), // Vibrant gold/yellow
+              AuraColors.red,    // Red
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-        child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          const Icon(Icons.workspace_premium, size: 11, color: AuraColors.red),
-          const SizedBox(width: 2),
-          Text(label,
-              style: const TextStyle(
-                  color: AuraColors.red,
-                  fontSize: 9,
-                  fontWeight: FontWeight.w800)),
-        ]),
+        padding: const EdgeInsets.all(1.0), // Gradient border outline
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+          decoration: BoxDecoration(
+            color: const Color(0xFF140D0E),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            const Icon(Icons.workspace_premium, size: 12, color: Color(0xFFFFD700)),
+            const SizedBox(width: 3),
+            Text(label,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w800)),
+          ]),
+        ),
       );
 }

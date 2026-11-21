@@ -61,6 +61,10 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.state.hasGeneratedSensitivityResults) {
+      _iphoneModel = widget.state.sensitivityModel;
+      _values = widget.state.sensitivityResults;
+    }
     _restoreIPhoneModel();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
@@ -83,7 +87,10 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
     }
     setState(() {
       _iphoneModel = savedModel;
-      _values = null;
+      _values = widget.state.hasGeneratedSensitivityResults &&
+              widget.state.sensitivityModel == savedModel
+          ? widget.state.sensitivityResults
+          : null;
     });
   }
 

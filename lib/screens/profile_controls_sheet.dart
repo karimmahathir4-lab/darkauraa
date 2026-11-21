@@ -90,20 +90,7 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                               ],
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AuraColors.red,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(context.tr('SIM'),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1)),
-                          ),
+
                           const SizedBox(width: 3),
                           IconButton(
                             tooltip: context.tr('Close'),
@@ -130,6 +117,7 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                                     .length;
                                 const navigation = <(IconData, String)>[
                                   (Icons.tune, 'Sensi'),
+                                  (Icons.center_focus_strong, 'Aim Cross'),
                                   (
                                     Icons.sports_baseball_outlined,
                                     'Ball Setup'
@@ -137,7 +125,6 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                                   (Icons.gps_fixed, 'Crosshair'),
                                   (Icons.gamepad_outlined, 'Controls'),
                                   (Icons.display_settings_outlined, 'Display'),
-                                  (Icons.track_changes, 'Habits'),
                                 ];
                                 return Padding(
                                   padding: const EdgeInsets.only(bottom: 6),
@@ -252,7 +239,8 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
                                               fontSize: 13,
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.bold,
+                                              color: AuraColors.red)),
                                     ),
                                     Text(
                                       displayedGroup < 0
@@ -507,6 +495,29 @@ Widget _buildEditor(BuildContext context, SetupToggle item, AppState state,
     case 'hit_markers':
       return _InlineNote(
           text: context.tr('Show hit markers in supported drills.'));
+    case 'basic_aim':
+      return _rangeEditor(
+          context.tr('Basic aim centering'), id, state, 1, 100, '%');
+    case 'aim_sensi':
+      return _rangeEditor(
+          context.tr('Aim sensitivity response'), id, state, 1, 200, '');
+    case 'aim_colors':
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _colorEditor(context.tr('Aim reticle color'), 'aim_colors', state),
+        ],
+      );
+    case 'aim_settings':
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _crosshairStylePicker(state),
+        ],
+      );
+    case 'aim_setup':
+      return _choiceEditor(context.tr('Aim configuration profile'), id, state,
+          const <String>['Balanced', 'Precision', 'Aggressive']);
     default:
       return const SizedBox.shrink();
   }

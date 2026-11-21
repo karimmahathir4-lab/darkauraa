@@ -26,10 +26,14 @@ int calculateDailyStreak(Iterable<DateTime> completedDays, DateTime today) {
 }
 
 class AppState extends ChangeNotifier {
+  static const MethodChannel _appIconChannel =
+      MethodChannel('com.handcraft.darkaura/app_icon');
+
   String languageCode = 'en';
   bool onboardingComplete = false;
   bool initialPaywallSeen = false;
   bool isPro = false;
+  String currentAppIcon = 'default';
   bool trainingProfileActive = false;
   Map<String, bool> toggles = defaultToggleValues();
   Map<String, int> bestScores = <String, int>{};
@@ -128,6 +132,10 @@ class AppState extends ChangeNotifier {
       _applyProfile(profiles.first);
     } else {
       _applySensitivity(activeProfile!);
+    }
+    final savedIcon = await AuraStorage.readSelectedAppIcon();
+    if (savedIcon != null) {
+      currentAppIcon = savedIcon;
     }
     notifyListeners();
   }
@@ -289,7 +297,27 @@ class AppState extends ChangeNotifier {
   void setProEntitled(bool value) {
     if (isPro == value) return;
     isPro = value;
+    if (value && currentAppIcon == 'default') {
+      unawaited(setAppIcon('ProIcon'));
+    }
     notifyListeners();
+  }
+
+  Future<bool> setAppIcon(String iconName) async {
+    currentAppIcon = iconName;
+    notifyListeners();
+    await AuraStorage.writeSelectedAppIcon(iconName);
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      try {
+        final target = iconName == 'default' ? null : iconName;
+        await _appIconChannel.invokeMethod<void>('setAlternateIconName', target);
+        return true;
+      } catch (e) {
+        debugPrint('Failed to set alternate app icon: $e');
+        return false;
+      }
+    }
+    return true;
   }
 
   bool toggle(String id) =>

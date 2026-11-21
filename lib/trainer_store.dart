@@ -3,7 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum TrainerMode { classic, speed, precision, moving, daily }
+enum TrainerMode {
+  aimDrills,
+  moving,
+  speed,
+  reaction,
+  daily,
+  gameDrills,
+}
 
 class ModeConfig {
   const ModeConfig({
@@ -14,6 +21,7 @@ class ModeConfig {
     required this.lifetime,
     this.moving = false,
     this.simultaneous = 1,
+    this.isPro = false,
   });
 
   final String label;
@@ -23,51 +31,63 @@ class ModeConfig {
   final double lifetime; // seconds a target stays
   final bool moving;
   final int simultaneous;
+  final bool isPro;
 }
 
 ModeConfig modeConfig(TrainerMode m) {
   switch (m) {
-    case TrainerMode.classic:
+    case TrainerMode.aimDrills:
       return const ModeConfig(
-        label: 'Classic',
-        blurb: 'One target at a time. Steady pace.',
+        label: 'Aim Drills',
+        blurb: 'Essential target acquisition and precision tapping.',
         seconds: 30,
-        radius: 34,
+        radius: 32,
         lifetime: 1.8,
-      );
-    case TrainerMode.speed:
-      return const ModeConfig(
-        label: 'Speed',
-        blurb: 'Targets vanish fast. Stay sharp.',
-        seconds: 20,
-        radius: 30,
-        lifetime: 1.1,
-      );
-    case TrainerMode.precision:
-      return const ModeConfig(
-        label: 'Precision',
-        blurb: 'Small targets. Accuracy matters.',
-        seconds: 30,
-        radius: 18,
-        lifetime: 2.4,
       );
     case TrainerMode.moving:
       return const ModeConfig(
         label: 'Moving',
-        blurb: 'Two bouncing targets at once.',
+        blurb: 'Dynamic bouncing targets for tracking mastery.',
         seconds: 30,
-        radius: 30,
-        lifetime: 2.6,
+        radius: 28,
+        lifetime: 2.8,
         moving: true,
         simultaneous: 2,
+      );
+    case TrainerMode.speed:
+      return const ModeConfig(
+        label: 'Speed',
+        blurb: 'High tempo rapid-response target elimination.',
+        seconds: 20,
+        radius: 26,
+        lifetime: 1.05,
+      );
+    case TrainerMode.reaction:
+      return const ModeConfig(
+        label: 'Reaction',
+        blurb: 'Instant reflexes and sudden target pop response.',
+        seconds: 25,
+        radius: 34,
+        lifetime: 0.9,
       );
     case TrainerMode.daily:
       return const ModeConfig(
         label: 'Daily',
-        blurb: 'Same target layout for everyone today.',
+        blurb: 'Global daily challenge layout for community comparison.',
         seconds: 30,
         radius: 28,
         lifetime: 1.6,
+      );
+    case TrainerMode.gameDrills:
+      return const ModeConfig(
+        label: 'Game Drills',
+        blurb: 'Pro combat simulation with rapid multi-target switching.',
+        seconds: 35,
+        radius: 24,
+        lifetime: 1.4,
+        moving: true,
+        simultaneous: 3,
+        isPro: true,
       );
   }
 }
@@ -112,7 +132,7 @@ class TrainerResult {
   factory TrainerResult.fromJson(Map<String, dynamic> j) => TrainerResult(
         mode: TrainerMode.values.firstWhere(
           (m) => m.name == j['mode'],
-          orElse: () => TrainerMode.classic,
+          orElse: () => TrainerMode.aimDrills,
         ),
         score: (j['score'] as num).toInt(),
         hits: (j['hits'] as num).toInt(),

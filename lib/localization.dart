@@ -66,14 +66,14 @@ const _translations = <String, Map<String, String>>{
         'Sua lista, progresso das lições, pontuações e histórico ficam salvos neste aparelho. Dados do dispositivo e desempenho são simulados. O app não lê nem altera configurações do jogo ou do celular.',
     'Practice with purpose': 'Treine com intenção',
     'Privacy and control': 'Privacidade e controle',
-    'Your progress stays on this device. Nothing in your game or phone is changed.':
-        'Seu progresso fica neste aparelho. Nada no jogo ou no celular é alterado.',
+    'Your progress stays on this device.':
+        'Seu progresso fica neste aparelho.',
     'Rewarded ad feature': 'Recurso com anúncio premiado',
     'Build steadier aim with short drills, progress tracking, and practical lessons.':
         'Melhore a precisão com treinos curtos, acompanhamento do progresso e lições práticas.',
     'Your setup stays yours': 'Sua configuração continua sua',
-    'Checklist choices stay in this app. Nothing in your game or phone is changed.':
-        'As opções da lista ficam neste app. Nada no jogo ou no celular é alterado.',
+    'Checklist choices stay in this app.':
+        'As opções da lista ficam neste app.',
     'Ads and your choice': 'Anúncios e sua escolha',
     'Dark Aura uses AppLovin to show ads. If you allow tracking, its ad partners may use identifiers to measure ads and make them more relevant. Ads may still appear if you decline.':
         'Dark Aura usa o AppLovin para exibir anúncios. Se permitir rastreamento, parceiros de anúncios podem usar identificadores para medir anúncios e torná-los mais relevantes. Anúncios ainda podem aparecer se você recusar.',
@@ -100,6 +100,9 @@ const _translations = <String, Map<String, String>>{
         'Como os dados locais do app são tratados',
     'Share App': 'Compartilhar app',
     'Tell someone about Aura Aim': 'Conte a alguém sobre Aura Aim',
+    'Rate Our App': 'Avaliar nosso app',
+    'Enjoying Dark Aura? Leave us a 5-star review!':
+        'Gostando do Dark Aura? Deixe uma avaliação de 5 estrelas!',
     'Rate App': 'Avaliar app',
     'Open the app store page': 'Abrir a página da loja',
     'Reset all progress': 'Redefinir todo o progresso',
@@ -419,6 +422,8 @@ const _translations = <String, Map<String, String>>{
     'WAIT': 'AGUARDE',
     'Activate at least one feature': 'Ative pelo menos um recurso',
     'Aim Trainer': 'Treino de mira',
+    'Aim Drills': 'Treinos de mira',
+    'Game Drills': 'Treinos de jogo',
     'Speed': 'Velocidade',
     'Moving': 'Em movimento',
     'Daily': 'Diário',
@@ -560,14 +565,14 @@ const _translations = <String, Map<String, String>>{
         'Tu lista, progreso de lecciones, puntuaciones e historial se guardan en este dispositivo. Los datos del dispositivo y rendimiento son simulados. La app no lee ni cambia los ajustes del juego o del móvil.',
     'Practice with purpose': 'Entrena con intención',
     'Privacy and control': 'Privacidad y control',
-    'Your progress stays on this device. Nothing in your game or phone is changed.':
-        'Tu progreso se guarda en este dispositivo. No se cambia nada en el juego ni en el móvil.',
+    'Your progress stays on this device.':
+        'Tu progreso se guarda en este dispositivo.',
     'Rewarded ad feature': 'Función con anuncio recompensado',
     'Build steadier aim with short drills, progress tracking, and practical lessons.':
         'Mejora la puntería con ejercicios breves, seguimiento del progreso y lecciones prácticas.',
     'Your setup stays yours': 'Tu configuración sigue siendo tuya',
-    'Checklist choices stay in this app. Nothing in your game or phone is changed.':
-        'Las opciones se guardan en esta app. No se cambia nada en el juego ni en el móvil.',
+    'Checklist choices stay in this app.':
+        'Las opciones se guardan en esta app.',
     'Ads and your choice': 'Anuncios y tu elección',
     'Dark Aura uses AppLovin to show ads. If you allow tracking, its ad partners may use identifiers to measure ads and make them more relevant. Ads may still appear if you decline.':
         'Dark Aura usa AppLovin para mostrar anuncios. Si permites el seguimiento, sus socios publicitarios pueden usar identificadores para medir los anuncios y hacerlos más relevantes. Si lo rechazas, pueden seguir apareciendo anuncios.',
@@ -594,6 +599,9 @@ const _translations = <String, Map<String, String>>{
         'Cómo se gestionan los datos locales de la app',
     'Share App': 'Compartir app',
     'Tell someone about Aura Aim': 'Cuéntale a alguien sobre Aura Aim',
+    'Rate Our App': 'Valorar nuestra app',
+    'Enjoying Dark Aura? Leave us a 5-star review!':
+        '¿Te gusta Dark Aura? ¡Déjanos una reseña de 5 estrellas!',
     'Rate App': 'Valorar app',
     'Open the app store page': 'Abrir la página de la tienda',
     'Reset all progress': 'Borrar todo el progreso',
@@ -869,6 +877,8 @@ const _translations = <String, Map<String, String>>{
     'Turn practice profile on': 'Activar perfil de práctica',
     'Activate at least one feature': 'Activa al menos una función',
     'Aim Trainer': 'Entrenamiento de puntería',
+    'Aim Drills': 'Ejercicios de puntería',
+    'Game Drills': 'Ejercicios de juego',
     'Speed': 'Velocidad',
     'Moving': 'En movimiento',
     'Daily': 'Diario',
@@ -1055,14 +1065,14 @@ const _translations = <String, Map<String, String>>{
         'تُحفظ قائمة التدريب وتقدم الدروس والنتائج والسجل على هذا الجهاز. بيانات الجهاز والأداء تجريبية. لا يقرأ التطبيق إعدادات الهاتف أو اللعبة ولا يغيّرها.',
     'Practice with purpose': 'تدرّب بهدف',
     'Privacy and control': 'الخصوصية والتحكم',
-    'Your progress stays on this device. Nothing in your game or phone is changed.':
-        'يبقى تقدمك على هذا الجهاز ولا تتغير إعدادات الهاتف أو اللعبة.',
+    'Your progress stays on this device.':
+        'يبقى تقدمك على هذا الجهاز.',
     'Rewarded ad feature': 'ميزة بإعلان ومكافأة',
     'Build steadier aim with short drills, progress tracking, and practical lessons.':
         'حسّن ثبات التصويب عبر تدريبات قصيرة ومتابعة التقدم ودروس عملية.',
     'Your setup stays yours': 'إعداداتك تبقى لك',
-    'Checklist choices stay in this app. Nothing in your game or phone is changed.':
-        'تبقى خيارات القائمة داخل التطبيق ولا تغيّر إعدادات الهاتف أو اللعبة.',
+    'Checklist choices stay in this app.':
+        'تبقى خيارات القائمة داخل التطبيق.',
     'Ads and your choice': 'الإعلانات وخيارك',
     'Dark Aura uses AppLovin to show ads. If you allow tracking, its ad partners may use identifiers to measure ads and make them more relevant. Ads may still appear if you decline.':
         'يستخدم Dark Aura خدمة AppLovin لعرض الإعلانات. إذا سمحت بالتتبع، فقد يستخدم شركاء الإعلانات المعرّفات لقياس الإعلانات وجعلها أكثر ملاءمة. قد تستمر الإعلانات في الظهور إذا رفضت.',
@@ -1089,6 +1099,9 @@ const _translations = <String, Map<String, String>>{
         'كيفية التعامل مع بيانات التطبيق المحلية',
     'Share App': 'مشاركة التطبيق',
     'Tell someone about Aura Aim': 'أخبر شخصًا عن Aura Aim',
+    'Rate Our App': 'قيّم تطبيقنا',
+    'Enjoying Dark Aura? Leave us a 5-star review!':
+        'هل يعجبك Dark Aura؟ اترك لنا تقييماً بـ 5 نجوم!',
     'Rate App': 'قيّم التطبيق',
     'Open the app store page': 'فتح صفحة المتجر',
     'Reset all progress': 'إعادة تعيين كل التقدم',
@@ -1357,6 +1370,8 @@ const _translations = <String, Map<String, String>>{
     'Turn practice profile on': 'تفعيل ملف التدريب',
     'Activate at least one feature': 'فعّل ميزة واحدة على الأقل',
     'Aim Trainer': 'مدرب التصويب',
+    'Aim Drills': 'تمارين التصويب',
+    'Game Drills': 'تمارين اللعب الاحترافي',
     'Speed': 'السرعة',
     'Moving': 'متحركة',
     'Daily': 'يومي',
