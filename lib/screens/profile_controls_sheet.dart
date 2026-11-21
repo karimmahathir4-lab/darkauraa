@@ -358,17 +358,6 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                           ),
                         ]),
                       ),
-                      const Divider(height: 1, color: Color(0x28FFFFFF)),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(9, 7, 9, 8),
-                        child: Text(
-                          context.tr(
-                              'Nothing on your phone or in a game is changed.'),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              color: AuraColors.secondary, fontSize: 9),
-                        ),
-                      ),
                     ]),
                   ),
                 ),
