@@ -290,11 +290,7 @@ class HomeScreen extends StatelessWidget {
                                         color: AuraColors.secondary)),
                               ])),
                     )),
-                    IconButton(
-                        tooltip: context.tr('Setup tip'),
-                        onPressed: () => _showTip(context, item),
-                        icon: const Icon(Icons.info_outline,
-                            size: 18, color: AuraColors.secondary)),
+
                     if (!state.isPro &&
                         AuraAds.instance.supportsAds &&
                         !proToggleIds.contains(item.id) &&

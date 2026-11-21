@@ -17,6 +17,7 @@ class ToggleGroup {
 
 const Set<String> proToggleIds = <String>{
   'ai_sensi_aim',
+  'aim_setup',
   'crosshair',
   'fire_size',
   'ping_live',

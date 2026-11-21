@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:ui' show ImageFilter;
 
@@ -195,18 +197,66 @@ class AuraShell extends StatefulWidget {
 
 class _AuraShellState extends State<AuraShell> {
   int _tab = 0;
+  Timer? _rateUsTimer;
 
   @override
   void initState() {
     super.initState();
     unawaited(_initializeAdsAfterPurchaseCheck(widget.state));
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || widget.state.initialPaywallSeen) return;
+      if (!mounted) return;
+      if (widget.state.initialPaywallSeen) {
+        _startRateUsCountdown();
+        return;
+      }
       unawaited(widget.state.markInitialPaywallSeen());
-      Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (_) => ProScreen(state: widget.state),
-      ));
+      unawaited(_showInitialPaywallThenStartRateUsCountdown());
     });
+  }
+
+  Future<void> _showInitialPaywallThenStartRateUsCountdown() async {
+    await Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (_) => ProScreen(state: widget.state),
+    ));
+    if (mounted) _startRateUsCountdown();
+  }
+
+  void _startRateUsCountdown() {
+    _rateUsTimer?.cancel();
+    _rateUsTimer = Timer(const Duration(seconds: 15), _requestFirstLaunchReview);
+  }
+
+  Future<void> _requestFirstLaunchReview() async {
+    if (!mounted) return;
+
+    // Wait until the main app screen is visible (for example, after the
+    // first-launch Pro screen has been dismissed) before showing a native UI.
+    if (ModalRoute.of(context)?.isCurrent != true) {
+      _rateUsTimer = Timer(const Duration(seconds: 1), _requestFirstLaunchReview);
+      return;
+    }
+
+    const requestedKey = 'rate_us_prompt_requested';
+    final preferences = await SharedPreferences.getInstance();
+    if (!mounted || preferences.getBool(requestedKey) == true) return;
+
+    // Store before requesting: the OS may suppress the prompt, and the app
+    // should still make this first-launch request only once.
+    await preferences.setBool(requestedKey, true);
+    try {
+      final review = InAppReview.instance;
+      if (await review.isAvailable()) {
+        await review.requestReview();
+      }
+    } catch (_) {
+      // Native review availability is controlled by the platform/store.
+    }
+  }
+
+  @override
+  void dispose() {
+    _rateUsTimer?.cancel();
+    super.dispose();
   }
 
   @override

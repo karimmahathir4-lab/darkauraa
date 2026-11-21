@@ -1,7 +1,7 @@
 name: aura_red_aim_panel
 description: "Dark Aura Panel mobile FPS practice, drills, and learning app."
 publish_to: 'none'
-version: 1.0.3+6
+version: 1.0.4+7
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -12,6 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   shared_preferences: ^2.3.2
+  in_app_review: ^2.0.12
   share_plus: ^7.2.2
   url_launcher: ^6.3.2
   qr_flutter: ^4.1.0

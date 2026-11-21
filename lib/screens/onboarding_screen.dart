@@ -30,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     (
       Icons.bolt,
       'Customize Sensi Setup',
-      'Choose your in-app sensitivity and setup preferences, then fine-tune them for comfortable practice. Your choices stay in the app and never change your phone or game.'
+      'Choose your in-app sensitivity and setup preferences, then fine-tune them for comfortable practice.'
     ),
     (
       Icons.tune,
