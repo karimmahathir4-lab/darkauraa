@@ -77,13 +77,14 @@ Future<void> showProfileControls(BuildContext context, AppState state) {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(context.tr('PRACTICE PROFILE'),
+                                Text(context.tr('Dark Aura Panel'),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w900,
                                         letterSpacing: .8,
                                         fontSize: 12)),
                                 const SizedBox(height: 3),
-                                Text(context.tr('App-only preferences'),
+                                Text(context.tr(
+                                    'Customize game experience in floating panel'),
                                     style: const TextStyle(
                                         color: AuraColors.secondary,
                                         fontSize: 9)),

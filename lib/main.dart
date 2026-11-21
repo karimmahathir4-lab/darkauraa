@@ -296,11 +296,14 @@ class _AuraShellState extends State<AuraShell> {
                         color: Colors.transparent,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(9),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => ProScreen(state: widget.state),
-                            ),
-                          ),
+                          onTap: widget.state.isPro
+                              ? null
+                              : () => Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) =>
+                                          ProScreen(state: widget.state),
+                                    ),
+                                  ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                             child: Row(

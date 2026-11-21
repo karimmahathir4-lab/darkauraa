@@ -34,6 +34,7 @@ class AppState extends ChangeNotifier {
   bool initialPaywallSeen = false;
   bool isPro = false;
   String currentAppIcon = 'default';
+  bool _hasSavedAppIconSelection = false;
   bool trainingProfileActive = false;
   Map<String, bool> toggles = defaultToggleValues();
   Map<String, int> bestScores = <String, int>{};
@@ -134,8 +135,9 @@ class AppState extends ChangeNotifier {
       _applySensitivity(activeProfile!);
     }
     final savedIcon = await AuraStorage.readSelectedAppIcon();
-    if (savedIcon != null) {
-      currentAppIcon = savedIcon;
+    if (savedIcon == 'default' || savedIcon == 'ProIcon') {
+      currentAppIcon = savedIcon!;
+      _hasSavedAppIconSelection = true;
     }
     notifyListeners();
   }
@@ -297,27 +299,52 @@ class AppState extends ChangeNotifier {
   void setProEntitled(bool value) {
     if (isPro == value) return;
     isPro = value;
-    if (value && currentAppIcon == 'default') {
-      unawaited(setAppIcon('ProIcon'));
+    if (value) {
+      if (_hasSavedAppIconSelection) {
+        unawaited(_syncNativeAppIcon(currentAppIcon));
+      } else if (currentAppIcon == 'default') {
+        unawaited(setAppIcon('ProIcon'));
+      }
+    } else if (currentAppIcon == 'ProIcon') {
+      unawaited(setAppIcon('default'));
     }
     notifyListeners();
   }
 
   Future<bool> setAppIcon(String iconName) async {
-    currentAppIcon = iconName;
-    notifyListeners();
-    await AuraStorage.writeSelectedAppIcon(iconName);
+    if (iconName == 'ProIcon' && !isPro) return false;
+
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       try {
         final target = iconName == 'default' ? null : iconName;
-        await _appIconChannel.invokeMethod<void>('setAlternateIconName', target);
-        return true;
+        final changed = await _appIconChannel
+            .invokeMethod<bool>('setAlternateIconName', target);
+        if (changed != true) return false;
       } catch (e) {
         debugPrint('Failed to set alternate app icon: $e');
         return false;
       }
     }
+
+    currentAppIcon = iconName;
+    _hasSavedAppIconSelection = true;
+    notifyListeners();
+    await AuraStorage.writeSelectedAppIcon(iconName);
     return true;
+  }
+
+  Future<void> _syncNativeAppIcon(String requestedIcon) async {
+    if (defaultTargetPlatform != TargetPlatform.iOS) return;
+    try {
+      final systemIcon = await _appIconChannel
+              .invokeMethod<String?>('getAlternateIconName') ??
+          'default';
+      if (systemIcon != requestedIcon) {
+        await setAppIcon(requestedIcon);
+      }
+    } catch (e) {
+      debugPrint('Failed to read the current app icon: $e');
+    }
   }
 
   bool toggle(String id) =>

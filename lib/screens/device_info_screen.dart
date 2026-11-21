@@ -308,7 +308,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-            SectionTitle(context.tr('Live Performance (simulated)'),
+            SectionTitle(context.tr('Live Performance'),
                 icon: Icons.speed),
             const SizedBox(height: 18),
             Row(

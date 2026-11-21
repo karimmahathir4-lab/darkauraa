@@ -142,8 +142,8 @@ class HomeScreen extends StatelessWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 320),
               curve: Curves.easeInOut,
-              height: 104,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              height: 112,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(26),
                 gradient: LinearGradient(
@@ -303,11 +303,12 @@ class HomeScreen extends StatelessWidget {
                               size: 17, color: AuraColors.red),
                         ),
                       ),
-                    if (proToggleIds.contains(item.id)) ...<Widget>[
-                      const SizedBox(width: 3),
-                      _ProFeatureBadge(label: context.tr('Pro')),
-                      const SizedBox(width: 3),
-                    ],
+                    if (!state.isPro && proToggleIds.contains(item.id))
+                      ...<Widget>[
+                        const SizedBox(width: 3),
+                        _ProFeatureBadge(label: context.tr('Pro')),
+                        const SizedBox(width: 3),
+                      ],
                     Switch(
                         value: state.toggle(item.id),
                         onChanged: (value) =>

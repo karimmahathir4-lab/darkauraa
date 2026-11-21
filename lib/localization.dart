@@ -104,6 +104,7 @@ const _translations = <String, Map<String, String>>{
     'Enjoying Dark Aura? Leave us a 5-star review!':
         'Gostando do Dark Aura? Deixe uma avaliação de 5 estrelas!',
     'Rate App': 'Avaliar app',
+    'Could not change app icon': 'Não foi possível alterar o ícone do app',
     'Open the app store page': 'Abrir a página da loja',
     'Reset all progress': 'Redefinir todo o progresso',
     'Clear scores, lessons, streaks, and toggles':
@@ -124,6 +125,8 @@ const _translations = <String, Map<String, String>>{
     'days': 'dias',
     'Practice profile enabled': 'Perfil de prática ativado',
     'Tap to enable practice profile': 'Toque para ativar o perfil de prática',
+    'Customize game experience in floating panel':
+        'Personalize a experiência do jogo no painel flutuante',
     'SENSI RESULT': 'RESULTADO DE SENSI',
     'Scale 0 to 200': 'Escala de 0 a 200',
     'GENERATED': 'GERADO',
@@ -146,7 +149,7 @@ const _translations = <String, Map<String, String>>{
     'Red Dot': 'Ponto vermelho',
     'Device Info (sample data)':
         'Informações do dispositivo (dados de amostra)',
-    'Live Performance (simulated)': 'Desempenho ao vivo (simulado)',
+    'Live Performance': 'Desempenho ao vivo',
     'iPhone model · choose manually': 'Modelo do iPhone · escolha manualmente',
     'Sample baseline': 'Base de amostra',
     'TRAIN WITH INTENTION': 'TREINE COM INTENÇÃO',
@@ -603,6 +606,7 @@ const _translations = <String, Map<String, String>>{
     'Enjoying Dark Aura? Leave us a 5-star review!':
         '¿Te gusta Dark Aura? ¡Déjanos una reseña de 5 estrellas!',
     'Rate App': 'Valorar app',
+    'Could not change app icon': 'No se pudo cambiar el icono de la aplicación',
     'Open the app store page': 'Abrir la página de la tienda',
     'Reset all progress': 'Borrar todo el progreso',
     'Clear scores, lessons, streaks, and toggles':
@@ -623,6 +627,8 @@ const _translations = <String, Map<String, String>>{
     'days': 'días',
     'Practice profile enabled': 'Perfil de práctica activado',
     'Tap to enable practice profile': 'Toca para activar el perfil de práctica',
+    'Customize game experience in floating panel':
+        'Personaliza la experiencia de juego en el panel flotante',
     'SENSI RESULT': 'RESULTADO DE SENSI',
     'Scale 0 to 200': 'Escala de 0 a 200',
     'GENERATED': 'GENERADO',
@@ -645,7 +651,7 @@ const _translations = <String, Map<String, String>>{
     'Red Dot': 'Punto rojo',
     'Device Info (sample data)':
         'Información del dispositivo (datos de muestra)',
-    'Live Performance (simulated)': 'Rendimiento en vivo (simulado)',
+    'Live Performance': 'Rendimiento en vivo',
     'iPhone model · choose manually': 'Modelo de iPhone · selección manual',
     'Sample baseline': 'Base de muestra',
     'TRAIN WITH INTENTION': 'ENTRENA CON INTENCIÓN',
@@ -1103,6 +1109,7 @@ const _translations = <String, Map<String, String>>{
     'Enjoying Dark Aura? Leave us a 5-star review!':
         'هل يعجبك Dark Aura؟ اترك لنا تقييماً بـ 5 نجوم!',
     'Rate App': 'قيّم التطبيق',
+    'Could not change app icon': 'تعذّر تغيير أيقونة التطبيق',
     'Open the app store page': 'فتح صفحة المتجر',
     'Reset all progress': 'إعادة تعيين كل التقدم',
     'Clear scores, lessons, streaks, and toggles':
@@ -1123,6 +1130,8 @@ const _translations = <String, Map<String, String>>{
     'days': 'أيام',
     'Practice profile enabled': 'ملف التدريب مفعّل',
     'Tap to enable practice profile': 'اضغط لتفعيل ملف التدريب',
+    'Customize game experience in floating panel':
+        'خصص تجربة اللعبة في اللوحة العائمة',
     'SENSI RESULT': 'نتيجة الحساسية',
     'Scale 0 to 200': 'المقياس من 0 إلى 200',
     'GENERATED': 'تم الإنشاء',
@@ -1144,7 +1153,7 @@ const _translations = <String, Map<String, String>>{
     'General': 'عام',
     'Red Dot': 'النقطة الحمراء',
     'Device Info (sample data)': 'معلومات الجهاز (بيانات نموذجية)',
-    'Live Performance (simulated)': 'الأداء المباشر (محاكاة)',
+    'Live Performance': 'الأداء المباشر',
     'iPhone model · choose manually': 'طراز iPhone · اختيار يدوي',
     'Sample baseline': 'قيمة أساسية تجريبية',
     'TRAIN WITH INTENTION': 'تدرّب بهدف',

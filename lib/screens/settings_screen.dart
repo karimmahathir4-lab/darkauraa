@@ -29,13 +29,19 @@ class SettingsScreen extends StatelessWidget {
           _languageCard(context),
           _tile(
               context,
-              Icons.block,
-              context.tr('Join ad free experience'),
-              context.tr('Remove ads from the app with a one-time purchase'),
-              () => Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                      builder: (_) => ProScreen(state: state)))),
+              state.isPro ? Icons.verified : Icons.block,
+              context.tr(state.isPro
+                  ? 'Dark Aura Panel Pro Experience Active'
+                  : 'Join Dark Aura Panel Pro Experience'),
+              context.tr(state.isPro
+                  ? 'Your Pro experience is active.'
+                  : 'Unlock every feature with a plan that fits you.'),
+              state.isPro
+                  ? null
+                  : () => Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                          builder: (_) => ProScreen(state: state)))),
           _tile(
               context,
               Icons.privacy_tip_outlined,
@@ -151,7 +157,15 @@ class SettingsScreen extends StatelessWidget {
             );
             return;
           }
-          await state.setAppIcon(iconKey);
+          final changed = await state.setAppIcon(iconKey);
+          if (!changed && context.mounted) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                content: Text(context.tr('Could not change app icon')),
+                behavior: SnackBarBehavior.floating,
+              ));
+          }
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
@@ -247,7 +261,7 @@ class SettingsScreen extends StatelessWidget {
       );
 
   Widget _tile(BuildContext context, IconData icon, String title,
-          String subtitle, VoidCallback onTap) =>
+          String subtitle, VoidCallback? onTap) =>
       Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: AuraCard(
@@ -256,7 +270,9 @@ class SettingsScreen extends StatelessWidget {
             leading: Icon(icon, color: AuraColors.red),
             title: Text(title),
             subtitle: Text(subtitle),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: onTap == null
+                ? const Icon(Icons.check_circle, color: AuraColors.red)
+                : const Icon(Icons.chevron_right),
             onTap: onTap,
           ),
         ),
